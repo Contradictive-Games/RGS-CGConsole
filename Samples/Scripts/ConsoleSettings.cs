@@ -29,5 +29,8 @@ namespace CGConsole
         [Tooltip("How many output logs can be held within the parent container at most?")]
         public int MaxLines = 800;
 
+        [Tooltip("If you want to see the error for why a command couldn't execute, or see the success message upon it executing properly")]
+        public bool ShowCommandResponseLogs = true;
+
     }
 }

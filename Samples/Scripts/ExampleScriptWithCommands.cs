@@ -15,19 +15,19 @@ namespace CGConsole
             Debug.Log("I hope you have a great day!");
         }
 
-        [ConsoleCmd("log_number {int}")]
+        [ConsoleCmd("log_number {int}", "Log any number you would like to see")]
         private void LogANumber(int number)
         {
             Debug.Log($"Great choice! Your number was: {number}");
         }
 
-        [ConsoleCmd("log_warning")]
+        [ConsoleCmd("log_warning", "Log a scary warning")]
         private void LogAWarning()
         {
             Debug.LogWarning("We just logged a warning");
         }
 
-        [ConsoleCmd("log_error")]
+        [ConsoleCmd("log_error", "Log an even scarier error")]
         private void LogAnError()
         {
             Debug.LogError($"We just logged an error!");

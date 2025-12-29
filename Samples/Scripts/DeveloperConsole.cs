@@ -83,11 +83,11 @@ namespace CGConsole
         private void OnCommandEntered(string input)
         {
             CommandResponse response = ConsoleCommandRegistry.TryExecute(input);
-            if(response.ResponseType == ResponseType.Success)
+            if(settings.ShowCommandResponseLogs && response.ResponseType == ResponseType.Success)
             {
                 AddLogLine($"<color=green>{response.Message}</color>", LogType.Log);
             } 
-            else AddLogLine($"<color=red> {response.Message}</color>", LogType.Error);
+            else if(settings.ShowCommandResponseLogs) AddLogLine($"<color=red> {response.Message}</color>", LogType.Error);
 
             consoleInput.text = "";
             consoleInput.ActivateInputField();
