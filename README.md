@@ -14,7 +14,6 @@ To create this ScriptableObject just simply right-click anywhere within the Proj
 
 This will of course not work with a custom made console, and only work with the demo version.
 
-**It is highly recommended to use th
 
 ## Installation
 
@@ -36,7 +35,16 @@ https://github.com/Contradictive-Games/RGS-CGConsole.git
 
 <br>
 
-## Usage
+## Getting Started
+
+This package includes a base `Console` class that you can inherit from. `Console.cs` is a MonoBehavior script that will handle all the basics of the Console. You can add this to any component by going into the component menu and going to `CGConsole/Console`, which will then add the proper component. 
+
+The Console does require some minimal setup. The first thing we will require is an `TMP_InputField`. This is where the user can type in commands and submit them.
+
+The second thing we require is a `RectTransform` in which the console's output logs will be parented to. It is generally recommended that you have some kind of basic handling for scrolling, content size fitting, etc. While it is not required, the base `Console` MonoBehavior will additionally have a `ScrollRect` field you can set within the inspector, all it will do by default is scroll to the bottom of the view when creating logs.
+
+
+## Command Usage and Creation
 
 ### Allow a MonoBehavior to Execute Commands
 
@@ -135,6 +143,15 @@ The ConsoleCommandRegistry handles the building of the `CommandResponse`.
 
 <br>
 <br>
+
+## Console Usage
+
+The base `Console` MonoBehavior methods can be overwritten. If you'd like the base functionality, you can simply inherit the `Console` class, and override as you see fit. It is however, recommended that you call the `base.MethodYouAreOverriding()` at first, if you'd like to keep some of the basic functionality. 
+
+The base class comes with a few useful methods. I recommend you look through the class in the `Runtime/` folder to see all of its core functionality.
+
+Additionally, if you'd like to create your own settings - you must inherit the `ConsoleSettings` ScriptableObject, and then type cast when using any of your custom settings.
+
 
 ## FAQ
 

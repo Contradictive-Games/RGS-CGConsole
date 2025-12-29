@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace CGConsole
 {
+    [AddComponentMenu("CGConsole/Console")]
     public class Console : MonoBehaviour, ICommandProvider
     {
         [Header("Console Components")]
