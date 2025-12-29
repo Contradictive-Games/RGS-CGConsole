@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577851dc42898c64e8bec926eb005002, type: 3}
+  m_Name: Example Console Settings
+  m_EditorClassIdentifier: CGConsole::CGConsole.ExampleConsoleSettings
+  InputFieldBackgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  InputTextColor: {r: 0, g: 0, b: 0, a: 1}
+  PlaceHolderTextColor: {r: 0, g: 0, b: 0, a: 1}
+  TextSize: 24
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  AssertColor: {r: 0, g: 1, b: 0, a: 1}
+  WarningColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  ErrorColor: {r: 1, g: 0, b: 0, a: 1}
+  ExceptionColor: {r: 1, g: 0, b: 0, a: 1}
+  MaxLines: 800
+  ShowStackTrace: 1
+  ShowCommandResponseLogs: 1
+  TopBarColor: {r: 0, g: 0, b: 0, a: 1}
+  TitleTitleColor: {r: 1, g: 1, b: 1, a: 1}
+  BackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  ScrollbarHandleColor: {r: 1, g: 1, b: 1, a: 1}
+  ScrollbarBackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

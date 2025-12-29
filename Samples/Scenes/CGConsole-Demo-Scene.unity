@@ -679,7 +679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.066037714, g: 0.066037714, b: 0.066037714, a: 1}
+  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1997,7 +1997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
+  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2898,7 +2898,7 @@ GameObject:
   - component: {fileID: 1358128639}
   - component: {fileID: 1358128643}
   m_Layer: 5
-  m_Name: DevConsoleCanvas
+  m_Name: ExampleConsoleCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2999,11 +2999,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a3f33347b377244cb83f0f6ba0f40ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CGConsole::CGConsole.DeveloperConsole
-  settings: {fileID: 11400000, guid: c9f4c69ccf0b0d14b8cdda3de6074976, type: 2}
-  logEntryPrefab: {fileID: 3801909936652903454, guid: ece8e71731c820843bf5f912f037efc8, type: 3}
-  logEntriesContainer: {fileID: 376263288}
   consoleInput: {fileID: 1394202535}
+  consoleOutputContainer: {fileID: 376263288}
   scrollRect: {fileID: 659190516}
+  consoleOutputPrefab: {fileID: 2952147083627745289, guid: ece8e71731c820843bf5f912f037efc8, type: 3}
+  Settings: {fileID: 11400000, guid: 95d8403a1525db5499066f7b46642185, type: 2}
   background: {fileID: 332364364}
   topBar: {fileID: 1863581000}
   titleText: {fileID: 242074789}
@@ -3939,7 +3939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.41509432, b: 0.3591516, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
