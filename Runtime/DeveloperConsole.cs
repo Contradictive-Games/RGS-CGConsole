@@ -20,7 +20,8 @@ namespace CGConsole
 
         [Header("Panel Components")]
         [SerializeField] private Image background;
-        [SerializeField] private Image dragBar;
+        [SerializeField] private Image topBar;
+        [SerializeField] private TMP_Text titleText;
         [SerializeField] private Image inputFieldBackground;
         [SerializeField] private TMP_Text inputFieldText;
         [SerializeField] private TMP_Text inputFieldPlaceholder;
@@ -49,32 +50,32 @@ namespace CGConsole
             RegisterCommands();
         }
 
-        [ContextMenu("Force Apply Theme")]
+        [ContextMenu("Apply Theme")]
         private void ApplyConsoleTheme()
         {
             if(settings == null) return;
 
-            if(background != null) background.color = settings.ConsoleBackground;
-            if(dragBar != null) dragBar.color = settings.ConsoleDragBar;
-            if(inputFieldBackground != null) inputFieldBackground.color = settings.InputFieldBackground;
-            if(inputFieldText != null) inputFieldText.color = settings.InputText;
-            if(inputFieldPlaceholder != null) inputFieldPlaceholder.color = settings.PlaceHolderText;
-            if(scrollBarHandle != null) scrollBarHandle.color = settings.ScrollbarHandle;
-            if(scrollBarBackground != null) scrollBarBackground.color = settings.ScrollbarBackground;
+            if(background != null) background.color = settings.BackgroundColor;
+            if(titleText != null) titleText.color = settings.TitleTitleColor;
+            if(topBar != null) topBar.color = settings.TopBarColor;
+            if(inputFieldBackground != null) inputFieldBackground.color = settings.InputFieldBackgroundColor;
+            if(inputFieldText != null) inputFieldText.color = settings.InputTextColor;
+            if(inputFieldPlaceholder != null) inputFieldPlaceholder.color = settings.PlaceHolderTextColor;
+            if(scrollBarHandle != null) scrollBarHandle.color = settings.ScrollbarHandleColor;
+            if(scrollBarBackground != null) scrollBarBackground.color = settings.ScrollbarBackgroundColor;
         }
 
 
         private void OnValidate()
         {
-            if(settings == null) return;
-
-            ApplyConsoleTheme();
+            if(settings == null) Debug.LogError($"We currently do not have a console settings asset");
+            else ApplyConsoleTheme();
         }
 
 
         private void RegisterCommands()
         {
-            ConsoleCommandRegistry.AutoRegisterCommands();
+            ConsoleCommandRegistry.RegisterAllCommands();
             allCommands = ConsoleCommandRegistry.GetAllCommands();
         }
 
@@ -120,11 +121,11 @@ namespace CGConsole
             switch (logType)
             {
                 case LogType.Log:
-                    return ColorUtility.ToHtmlStringRGBA(settings.NormalText);
+                    return ColorUtility.ToHtmlStringRGBA(settings.NormalTextColor);
                 case LogType.Warning:
-                    return ColorUtility.ToHtmlStringRGBA(settings.WarningText);
+                    return ColorUtility.ToHtmlStringRGBA(settings.WarningTextColor);
                 case LogType.Error:
-                    return ColorUtility.ToHtmlStringRGBA(settings.ErrorText);
+                    return ColorUtility.ToHtmlStringRGBA(settings.ErrorTextColor);
                 default:
                     return "white";
             }

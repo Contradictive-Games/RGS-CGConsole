@@ -2,30 +2,32 @@ using UnityEngine;
 
 namespace CGConsole
 {
-    [CreateAssetMenu(fileName = "Console Settings", menuName = "Custom/Dev/Console Settings")]
+    [CreateAssetMenu(fileName = "CGConsole Settings", menuName = "CGConsole Settings")]
     public class ConsoleSettings : ScriptableObject
     {
         [Header("Console Panel")]
-        public Color ConsoleDragBar = Color.black;
-        public Color ConsoleBackground = Color.gray;
+        public Color TopBarColor = Color.black;
+        public Color TitleTitleColor = Color.white;
+        public Color BackgroundColor = Color.gray;
 
         [Header("Input Field")]
-        public Color InputFieldBackground = Color.white;
-        public Color InputText = Color.black;
-        public Color PlaceHolderText = Color.black;
+        public Color InputFieldBackgroundColor = Color.white;
+        public Color InputTextColor = Color.black;
+        public Color PlaceHolderTextColor = Color.black;
 
         [Header("Scroll Bar")]
-        public Color ScrollbarHandle = Color.white;
-        public Color ScrollbarBackground = Color.gray;
+        public Color ScrollbarHandleColor = Color.white;
+        public Color ScrollbarBackgroundColor = Color.gray;
 
         [Header("Text Colors")]        
-        public Color NormalText = Color.white;
-        public Color SuccessText = Color.green;
-        public Color WarningText = Color.yellow;
-        public Color ErrorText = Color.red;
+        public Color NormalTextColor = Color.white;
+        public Color SuccessTextColor = Color.green;
+        public Color WarningTextColor = Color.yellow;
+        public Color ErrorTextColor = Color.red;
 
         [Header("Additional Settings")]
-        public int MaxLines = 200;
+        [Tooltip("How many output logs can be held within the parent container at most?")]
+        public int MaxLines = 800;
 
     }
 }

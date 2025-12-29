@@ -12,7 +12,7 @@ This is a part of RGS (Re-usable Game Systems) that I have created to help poten
 
 This is where installation details would go
 
-## Example Usage
+## Usage
 
 ### Creating a Console Command
 
