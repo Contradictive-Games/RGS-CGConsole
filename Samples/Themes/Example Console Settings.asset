@@ -22,7 +22,7 @@ MonoBehaviour:
   ErrorColor: {r: 1, g: 0, b: 0, a: 1}
   ExceptionColor: {r: 1, g: 0, b: 0, a: 1}
   MaxLines: 800
-  ShowStackTrace: 1
+  ShowStackTrace: 0
   ShowCommandResponseLogs: 1
   TopBarColor: {r: 0, g: 0, b: 0, a: 1}
   TitleTitleColor: {r: 1, g: 1, b: 1, a: 1}
