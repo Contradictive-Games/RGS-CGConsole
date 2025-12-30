@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cebf3a7b436eff4f8ac9003c5a50351, type: 3}
-  m_Name: Default Settings
+  m_Name: Base Console Settings
   m_EditorClassIdentifier: CGConsole::CGConsole.ConsoleSettings
   TopBarColor: {r: 0, g: 0.41509432, b: 0.3591516, a: 1}
   TitleTitleColor: {r: 1, g: 1, b: 1, a: 1}

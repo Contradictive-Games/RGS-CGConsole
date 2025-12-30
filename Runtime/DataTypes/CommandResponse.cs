@@ -9,8 +9,8 @@ namespace ContradictiveGames.CGConsole
     
     public struct CommandResponse
     {
-        public ResponseType ResponseType;
-        public string Message;
+        public readonly ResponseType ResponseType;
+        public readonly string Message;
 
         public CommandResponse(ResponseType responseType, string message)
         {
