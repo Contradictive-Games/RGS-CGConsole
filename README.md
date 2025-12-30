@@ -1,7 +1,7 @@
-
 # CG Console
 
 > CG Console is a developer console that allows you to create your own commands, and execute them from a console window or from scripts.
+
 
 
 ## Notes
@@ -13,6 +13,7 @@ Within the `Runtime/Samples` folder, there is a prefab that contains an example 
 To create this ScriptableObject just simply right-click anywhere within the Project window, and in the ContextMenu select the 'CGConsole Settings" option.
 
 This will of course not work with a custom made console, and only work with the demo version.
+
 
 
 ## Installation
@@ -34,6 +35,7 @@ https://github.com/Contradictive-Games/RGS-CGConsole.git
 ```
 
 
+
 ## Getting Started
 
 This package includes a base `Console` class that you can inherit from. `Console.cs` is a MonoBehavior script that will handle all the basics of the Console. You can add this to any component by going into the component menu and going to `CGConsole/Console`, which will then add the proper component. 
@@ -43,28 +45,9 @@ The Console does require some minimal setup. The first thing we will require is 
 The second thing we require is a `RectTransform` in which the console's output logs will be parented to. It is generally recommended that you have some kind of basic handling for scrolling, content size fitting, etc. While it is not required, the base `Console` MonoBehavior will additionally have a `ScrollRect` field you can set within the inspector, all it will do by default is scroll to the bottom of the view when creating logs.
 
 
-## Command Usage and Creation
 
-### Allow a class to Execute Commands
+## Example Command Usage and Creation
 
-Any time you want to use the `ConsoleCmd` attribute, it is best to implement the `ICommandProvider` interface which looks like:
-
-```csharp
-public interface ICommandProvider 
-{ 
-    public void RegisterCommands();
-}
-```
-
-Generally, the implentation of this interface will just look like:
-
-```csharp
-public void RegisterCommands(){
-    ConsoleCommandRegistry.RegisterCommandsFrom(this);
-}
-```
-
-If a MonoBehavior is present when the `Console` is created - the `ICommandProvider`
 
 ### Creating a Console Command
 
@@ -97,26 +80,83 @@ To begin using any commands you create, you must register these commands. There'
 ConsoleCommandRegistry.RegisterAllCommands();
 ```
 
-This will register all `[ConsoleCmd]` attributes and their functions from all MonoBehaviors that have the ICommandProvider when this command was called.
+This will register all `[ConsoleCmd]` attributes and their functions from all MonoBehaviors that have implemented `ICommandProvider` and are actively in the scene when this function was called. If you are utilizing the `Console` class in any way - this is called within the `Start` function.
 
-The main limitation of only doing this would be that if you call this in the start function of a MonoBehavior, and spawn an object afterwards that has a `[ConsoleCmd]` - this command will not have been registered because this function was called before it existed.
+> **NOTE:** This command will by default ***only*** register MonoBehaviors that are using the `ICommandProvider` interface. However, you can override by adding `true` as the argument and it will register any MonoBehavior whether or not it implements the interface. It is best to never override it, but it is an option.
 
-#### Register Commands From MonoBehavior
+
+#### Manually Register Commands
+
+When manually registering commands, just do:
 
 ```cs
 ConsoleCommandRegistry.RegisterCommandsFrom(this)
 ```
 
+Calling this function does **not** require the class to implement `ICommandProvider`.
+
 This will register all `[ConsoleCmd]` attributes and their functions from the MonoBehavior we call this function from.
 
-The main limitation of only doing this comes from having to call this from every single MonoBehavior whenever it is created, leading to potential issues with forgetting to call this function - and not being able to use a command as intended.
+
+#### Registering Commands From A Class
+
+Classes can support console commands as well, and are not required to implement `ICommandProvider`. More often than not, I would just recommend registering commands within the class's constructor.
+
+```cs
+public class TestClass
+{
+    //Properties...
+    
+    [ConsoleCmd("test_command")]
+    public void MyCommandFunctionWithinAClass(){
+        //Do something
+    }
+
+    //Constructor
+    public TestClass(){
+        //Set values
+        ConsoleCommandRegister.RegisterCommandsFrom(this);
+    }
+}
+```
+
+You can of course also do the following if you would rather not do it within the constructor:
+
+```cs
+public class AnotherTestClass
+{
+    //Properties
+    [ConsoleCmd("another_test_command")]
+    public void ExampleFunction(){
+        //Do something
+    }
+}
+
+
+public class TestMonoBehavior : MonoBehavior
+{
+
+    public AnotherTestClass MyClass = new();
+    
+    private void Start()
+    {
+        RegisterCommandsInMyTestClass();
+    }
+
+    private void RegisterCommandsInMyTestClass()
+    {
+        ConsoleCommandRegister.RegisterCommandsFrom(MyClass);
+    }
+
+}
+```
 
 
 ### Executing a Console Command
 
-Commands can both be executed within a script and by typing the command within the DeveloperConsole's input field. 
+Commands can both be executed within a script and by typing the command within the `Console` input field. 
 
-Otherwise, they can also be executed within a script by doing the following
+To execute a command within a script you can do:
 
 ```csharp
 ConsoleCommandRegistry.TryExecute("command_goes_here");
@@ -145,37 +185,29 @@ public struct CommandResponse
 }
 ```
 
-The ConsoleCommandRegistry handles the building of the `CommandResponse`.
+The `ConsoleCommandRegistry` handles the building of the `CommandResponse`.
+
 
 
 ## Console Usage
 
-The base `Console` MonoBehavior methods can be overwritten. If you'd like the base functionality, you can simply inherit the `Console` class, and override as you see fit. It is however, recommended that you call the `base.MethodYouAreOverriding()` at first, if you'd like to keep some of the basic functionality. 
+Implementing the `Console` is pretty simple, and it can 
 
 The base class comes with a few useful methods. I recommend you look through the class in the `Runtime/` folder to see all of its core functionality.
 
 Additionally, if you'd like to create your own settings - you must inherit the `ConsoleSettings` ScriptableObject, and then type cast when using any of your custom settings.
 
 
+
 ## FAQ
 
-### Supported Types
+### What Types Are Supported For the Command's Args?
+
 Console Commands really only work with supporting basic types like `string`, `int`, `float`, and `bool`
 
-### Why is my command not working?
+### Are There Any Default Commands?
 
-First ensure that the class you are trying to execute the command from is a `MonoBehavior` and you are adding the `ICommandProvider` interface.
-
-If that is done correctly, it may be that the script that has the `[ConsoleCmd]` attribute didn't register the command. Often times, this can be solved by adding this command into your OnEnable
-
-```cs
-private void OnEnable()
-{
-    ConsoleCommandRegistry.RegistCommandsFrom(this);
-}
-```
-
-Ensure that this command properly registers by typing the `help` command into the console, which will list all available commands.
+There is one default command being `help` - which will log all commands and their descriptions.
 
 
 
@@ -185,5 +217,5 @@ Features that are not currently in this package, but I would eventually like to 
 
 - [ ] Support structs as console command arguments
 - [ ] Support gathering commands automatically, rather than manual registration
-- [ ] Add auto-complete when typing a command
-- [x] Support non MonoBehavior derived classes being able to have command functions
+- [ ] Add auto-complete when typing a command in Console input field
+- [x] Support non-MonoBehavior classes being able to utilize commands

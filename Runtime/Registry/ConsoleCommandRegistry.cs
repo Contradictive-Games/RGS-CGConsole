@@ -26,12 +26,13 @@ namespace ContradictiveGames.CGConsole
         #region Command Registration
 
 
-        public static void RegisterAllCommands()
+        public static void RegisterAllCommands(bool mustBeCommandProvider = true)
         {
             MonoBehaviour[] objects = GameObject.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
             foreach (var obj in objects)
             {
-                if (obj is ICommandProvider) RegisterCommandsFrom(obj);
+                if (mustBeCommandProvider && obj is ICommandProvider) RegisterCommandsFrom(obj);
+                else if(!mustBeCommandProvider) RegisterCommandsFrom(obj);
             }
             Debug.Log($"Successfully registered {allCommands.Count} commands. Type `help` into the console to see all available commands.");
         }

@@ -4,22 +4,26 @@ using UnityEngine.UI;
 
 namespace ContradictiveGames.CGConsole
 {
-    public class TestingClass : ICommandProvider
+    public class TestingClass
     {
         [ConsoleCmd("testing")]
         public void TestingFunction()
         {
-            Debug.Log("We just successfully tested a function within a class!");
-        }
-
-        public void RegisterCommands()
-        {
-            ConsoleCommandRegistry.RegisterCommandsFrom(this);
+            Debug.Log("We just successfully tested a function within a class that had their commands registered in the constructor");
         }
 
         public TestingClass()
         {
-            RegisterCommands();
+            ConsoleCommandRegistry.RegisterCommandsFrom(this);
+        }
+    }
+
+    public class TestingClassNumberTwo
+    {
+        [ConsoleCmd("testing_again")]
+        public void TestingFunctionNumberTwo()
+        {
+            Debug.Log("We just succesfully tested a function within a class that had their commands registered in the MonoBehavior");
         }
     }
 
@@ -40,7 +44,15 @@ namespace ContradictiveGames.CGConsole
         [SerializeField] private Image scrollBarBackground;
 
         public TestingClass @class = new();
+        public TestingClassNumberTwo class2 = new();
 
+
+        protected override void Start()
+        {
+            base.Start();
+
+            ConsoleCommandRegistry.RegisterCommandsFrom(class2);
+        }
 
 
         [ContextMenu("Apply Theme")]
