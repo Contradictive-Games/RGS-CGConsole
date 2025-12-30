@@ -1,7 +1,7 @@
 # CG Console Changelog
 
 
-## [v0.6.123025] - 12-30-2025
+## [v0.6.251230] - 12-30-2025
 
 This marks the second release of CGConsole.
 

@@ -1,6 +1,6 @@
 {
     "name": "com.contradictivegames.cgconsole",
-    "version": "1.0.0",
+    "version": "v0.6.251230",
     "displayName": "CG Console",
     "description": "CG Console is a developer console that supports adding custom commands, and executing them from a console window.",
     "unity": "",
