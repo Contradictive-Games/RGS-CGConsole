@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CGConsole
+namespace ContradictiveGames.CGConsole
 {
     [AddComponentMenu("CGConsole/Console")]
     public class Console : MonoBehaviour, ICommandProvider
@@ -122,6 +122,17 @@ namespace CGConsole
 
         #endregion
 
+        #region Default Commands
+        
+        
+        [ConsoleCmd("help")]
+        protected virtual void GetAllCommands()
+        {
+            CreateConsoleOutput(ConsoleCommandRegistry.CommandHelpString);
+        }
+        
+        
+        #endregion
 
     }
 }

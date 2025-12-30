@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CGConsole
+namespace ContradictiveGames.CGConsole
 {
     public class ExampleCommandExecutor : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace CGConsole
+namespace ContradictiveGames.CGConsole
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class ConsoleCmdAttribute : Attribute

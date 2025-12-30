@@ -1,1 +1,4 @@
-public interface ICommandProvider {}
+namespace ContradictiveGames.CGConsole
+{
+    public interface ICommandProvider {}
+}

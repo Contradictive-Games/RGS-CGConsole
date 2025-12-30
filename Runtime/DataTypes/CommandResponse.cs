@@ -1,4 +1,4 @@
-namespace CGConsole
+namespace ContradictiveGames.CGConsole
 {
     public enum ResponseType
     {

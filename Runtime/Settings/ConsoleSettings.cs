@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CGConsole
+namespace ContradictiveGames.CGConsole
 {
     [CreateAssetMenu(fileName = "CGConsole Settings", menuName = "CGConsole Settings")]
     public class ConsoleSettings : ScriptableObject

@@ -1,10 +1,8 @@
 using TMPro;
 using UnityEngine;
-using System;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
-namespace CGConsole
+namespace ContradictiveGames.CGConsole
 {
     public class ExampleConsole : Console, ICommandProvider
     {
@@ -20,10 +18,6 @@ namespace CGConsole
         [SerializeField] private TMP_Text inputFieldPlaceholder;
         [SerializeField] private Image scrollBarHandle;
         [SerializeField] private Image scrollBarBackground;
-
-
-        private List<ConsoleCommand> allCommands;
-
 
 
         [ContextMenu("Apply Theme")]
@@ -49,39 +43,5 @@ namespace CGConsole
             if(settings == null) Debug.LogError($"We currently do not have a console settings asset");
             else ApplyConsoleTheme();
         }
-
-
-        #region Developer Commands
-
-
-        [ConsoleCmd("killall 1", "Will kill all nearby Enemies")]
-        private void KillAll()
-        {
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            foreach (var enemy in enemies)
-            {
-                enemy.SetActive(false);
-            }
-        }
-
-        [ConsoleCmd("help")]
-        private void GetAllCommands()
-        {
-            if(allCommands.Count == 0)
-            {
-                allCommands = ConsoleCommandRegistry.GetAllCommands();
-            }
-            // AddLogLine($"List of all commands: ");
-            string response = "Commands List: \n";
-
-            foreach(var cmd in allCommands)
-            {
-                response += $"{cmd.Command}" + (!String.IsNullOrWhiteSpace(cmd.Description) ? "     |       description: " + cmd.Description : "") + "\n";
-            }
-            CreateConsoleOutput(response);
-        }
-
-
-        #endregion
     }
 }

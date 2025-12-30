@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CGConsole
+namespace ContradictiveGames.CGConsole
 {
     [CreateAssetMenu(fileName = "Example Console Settings", menuName = "CGConsole Demo/Example Console Settings")]
     public class ExampleConsoleSettings : ConsoleSettings
