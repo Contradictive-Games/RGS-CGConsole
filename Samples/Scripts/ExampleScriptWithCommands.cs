@@ -32,5 +32,12 @@ namespace ContradictiveGames.CGConsole
         {
             Debug.LogError($"We just logged an error!");
         }
+
+        
+        //Interface implementation
+        public void RegisterCommands()
+        {
+            ConsoleCommandRegistry.RegisterCommandsFrom(this);
+        }
     }
 }

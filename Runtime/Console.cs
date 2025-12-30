@@ -135,5 +135,16 @@ namespace ContradictiveGames.CGConsole
         
         #endregion
 
+        #region Interface Implementation
+        
+        
+        public void RegisterCommands()
+        {
+            ConsoleCommandRegistry.RegisterCommandsFrom(this);
+        }
+
+
+        #endregion
+
     }
 }

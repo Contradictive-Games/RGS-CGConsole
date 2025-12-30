@@ -33,7 +33,6 @@ To install via git URL, open the PackageManager window within the Editor and cli
 https://github.com/Contradictive-Games/RGS-CGConsole.git
 ```
 
-<br>
 
 ## Getting Started
 
@@ -46,17 +45,22 @@ The second thing we require is a `RectTransform` in which the console's output l
 
 ## Command Usage and Creation
 
-### Allow a MonoBehavior to Execute Commands
+### Allow a class to Execute Commands
 
-Any time you want to use the `ConsoleCmd` attribute, for it to work properly, you must implement the ICommandProvider interface.
+Any time you want to use the `ConsoleCmd` attribute, for it to work properly, you must implement the `ICommandProvider` interface.
 
 ```csharp
-using UnityEngine;
-using CGConsole;
-
-public class ExampleMonoBehavior : MonoBehavior, ICommandProvider 
+public interface ICommandProvider 
 { 
-    ///Example class...
+    public void RegisterCommands();
+}
+```
+
+Generally, the implentation of this interface will just look like:
+
+```csharp
+public void RegisterCommands(){
+    ConsoleCommandRegistry.RegisterCommandsFrom(this);
 }
 ```
 
@@ -141,8 +145,6 @@ public struct CommandResponse
 
 The ConsoleCommandRegistry handles the building of the `CommandResponse`.
 
-<br>
-<br>
 
 ## Console Usage
 
@@ -173,8 +175,6 @@ private void OnEnable()
 
 Ensure that this command properly registers by typing the `help` command into the console, which will list all available commands.
 
-<br>
-<br>
 
 
 ## Stretch
@@ -184,4 +184,4 @@ Features that are not currently in this package, but I would eventually like to 
 - [ ] Support structs as console command arguments
 - [ ] Support gathering commands automatically, rather than manual registration
 - [ ] Add auto-complete when typing a command
-- [ ] Support non MonoBehavior derived classes being able to have command functions
+- [x] Support non MonoBehavior derived classes being able to have command functions

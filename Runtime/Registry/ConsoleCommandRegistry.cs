@@ -26,20 +26,25 @@ namespace ContradictiveGames.CGConsole
         }
 
 
-        public static void RegisterCommandsFrom(MonoBehaviour target)
+        public static void RegisterCommandsFrom(object target)
         {
             var methods = target.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            string cmdName = "";
 
             foreach (var method in methods)
             {
                 var attr = method.GetCustomAttribute<ConsoleCmdAttribute>();
                 if (attr != null)
                 {
-                    string cmdName = attr.CommandFormat.Split(' ')[0];
+                    cmdName = attr.CommandFormat.Split(' ')[0];
+                    
+                    if(allCommands.ContainsKey(cmdName)) return;
 
                     allCommands.Add(cmdName, new ConsoleCommand(cmdName, attr.Description, method, target));
                 }
             }
+
+            Debug.Log($"Registered `{cmdName}` command from {target}");
 
             UpdateHelpString();
         }

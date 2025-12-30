@@ -1,11 +1,32 @@
+using System.Windows.Input;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace ContradictiveGames.CGConsole
 {
+    public class TestingClass : ICommandProvider
+    {
+        [ConsoleCmd("testing")]
+        public void TestingFunction()
+        {
+            Debug.Log("We just successfully tested a function within a class!");
+        }
+
+        public void RegisterCommands()
+        {
+            ConsoleCommandRegistry.RegisterCommandsFrom(this);
+        }
+
+        public TestingClass()
+        {
+            RegisterCommands();
+        }
+    }
+
     public class ExampleConsole : Console, ICommandProvider
     {
+        
         [Header("Settings")]
         private ExampleConsoleSettings settings => Settings as ExampleConsoleSettings;
 
@@ -18,6 +39,9 @@ namespace ContradictiveGames.CGConsole
         [SerializeField] private TMP_Text inputFieldPlaceholder;
         [SerializeField] private Image scrollBarHandle;
         [SerializeField] private Image scrollBarBackground;
+
+        public TestingClass @class = new();
+
 
 
         [ContextMenu("Apply Theme")]
