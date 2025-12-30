@@ -8,7 +8,18 @@ namespace ContradictiveGames.CGConsole
 {
     public class ConsoleCommandRegistry
     {
-        private static readonly Dictionary<string, ConsoleCommand> allCommands = new();
+        private static readonly Dictionary<string, ConsoleCommand> allCommands = new(){ 
+            { 
+                "help", 
+                new ConsoleCommand(
+                    "help", 
+                    "List all available console commands", 
+                    typeof(ConsoleCommandRegistry).GetMethod(nameof(ShowHelp), BindingFlags.Static | BindingFlags.NonPublic), 
+                    new ParameterInfo[0],
+                    null
+                ) 
+            }
+        };
         public static string CommandHelpString { get; private set; }
 
 
@@ -34,13 +45,15 @@ namespace ContradictiveGames.CGConsole
             foreach (var method in methods)
             {
                 var attr = method.GetCustomAttribute<ConsoleCmdAttribute>();
+                
                 if (attr != null)
                 {
                     cmdName = attr.CommandFormat.Split(' ')[0];
+                    ParameterInfo[] @params = method.GetParameters();
                     
                     if(allCommands.ContainsKey(cmdName)) return;
 
-                    allCommands.Add(cmdName, new ConsoleCommand(cmdName, attr.Description, method, target));
+                    allCommands.Add(cmdName, new ConsoleCommand(cmdName, attr.Description, method, @params, target));
                 }
             }
 
@@ -69,16 +82,14 @@ namespace ContradictiveGames.CGConsole
                 return new CommandResponse(ResponseType.Error, $"Command `{cmd}` was not found, or was not registered properly");
             }
 
-            object target = command.MonoBehaviorTarget;
-            if (target == null)
+            if (command.Target == null && !command.MethodToExecute.IsStatic)
             {
                 return new CommandResponse(ResponseType.Error, $"Could not find any valid targets for `{cmd}");
             }
 
-            ParameterInfo[] paramInfos = command.MethodToExecute.GetParameters();
 
-            object[] parameters = new object[paramInfos.Length];
-            for (int i = 0; i < paramInfos.Length; i++)
+            object[] parameters = new object[command.Parameters.Length];
+            for (int i = 0; i < command.Parameters.Length; i++)
             {
                 if (i + 1 >= parts.Length)
                 {
@@ -86,7 +97,7 @@ namespace ContradictiveGames.CGConsole
                 }
 
                 string arg = parts[i + 1];
-                Type paramType = paramInfos[i].ParameterType;
+                Type paramType = command.Parameters[i].ParameterType;
                 try
                 {
                     parameters[i] = Convert.ChangeType(arg, paramType);
@@ -97,7 +108,7 @@ namespace ContradictiveGames.CGConsole
                 }
             }
 
-            command.MethodToExecute.Invoke(target, parameters);
+            command.MethodToExecute.Invoke(command.Target, parameters);
             return new CommandResponse(ResponseType.Success, "Success");
         }
 
@@ -106,6 +117,11 @@ namespace ContradictiveGames.CGConsole
 
 
         #region Utilities
+
+        private static void ShowHelp()
+        {
+            Debug.Log(CommandHelpString);
+        }
 
 
         private static void UpdateHelpString()

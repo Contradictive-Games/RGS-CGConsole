@@ -7,6 +7,7 @@ namespace ContradictiveGames.CGConsole
         private void Awake()
         {
             Debug.Log("Hello from Awake!", this);
+            RegisterCommands();
         }
 
         [ConsoleCmd("log_nice")]

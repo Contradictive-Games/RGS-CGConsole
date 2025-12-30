@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace ContradictiveGames.CGConsole
 {
     [AddComponentMenu("CGConsole/Console")]
-    public class Console : MonoBehaviour, ICommandProvider
+    public class Console : MonoBehaviour
     {
         [Header("Console Components")]
         [SerializeField] private TMP_InputField consoleInput;
@@ -118,29 +118,6 @@ namespace ContradictiveGames.CGConsole
             }
 
             consoleInput.ActivateInputField();
-        }
-
-
-        #endregion
-
-        #region Default Commands
-        
-        
-        [ConsoleCmd("help")]
-        protected virtual void GetAllCommands()
-        {
-            CreateConsoleOutput(ConsoleCommandRegistry.CommandHelpString);
-        }
-        
-        
-        #endregion
-
-        #region Interface Implementation
-        
-        
-        public void RegisterCommands()
-        {
-            ConsoleCommandRegistry.RegisterCommandsFrom(this);
         }
 
 

@@ -1,4 +1,3 @@
-using System.Windows.Input;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +23,7 @@ namespace ContradictiveGames.CGConsole
         }
     }
 
-    public class ExampleConsole : Console, ICommandProvider
+    public class ExampleConsole : Console
     {
         
         [Header("Settings")]

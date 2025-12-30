@@ -2,19 +2,21 @@ using System.Reflection;
 
 namespace ContradictiveGames.CGConsole
 {
-    public struct ConsoleCommand
+    public class ConsoleCommand
     {
         public string Command;
         public string Description;
         public MethodInfo MethodToExecute;
-        public object MonoBehaviorTarget;
+        public ParameterInfo[] Parameters;
+        public object Target;
 
-        public ConsoleCommand(string command, string description, MethodInfo methodToExecute, object monoBehaviorTarget)
+        public ConsoleCommand(string command, string description, MethodInfo methodToExecute, ParameterInfo[] parameters, object target)
         {
             Command = command;
             Description = description;
             MethodToExecute = methodToExecute;
-            MonoBehaviorTarget = monoBehaviorTarget;
+            Parameters = parameters;
+            Target = target;
         }
     }
 }

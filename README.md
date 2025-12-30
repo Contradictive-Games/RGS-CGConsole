@@ -47,7 +47,7 @@ The second thing we require is a `RectTransform` in which the console's output l
 
 ### Allow a class to Execute Commands
 
-Any time you want to use the `ConsoleCmd` attribute, for it to work properly, you must implement the `ICommandProvider` interface.
+Any time you want to use the `ConsoleCmd` attribute, it is best to implement the `ICommandProvider` interface which looks like:
 
 ```csharp
 public interface ICommandProvider 
@@ -63,6 +63,8 @@ public void RegisterCommands(){
     ConsoleCommandRegistry.RegisterCommandsFrom(this);
 }
 ```
+
+If a MonoBehavior is present when the `Console` is created - the `ICommandProvider`
 
 ### Creating a Console Command
 
