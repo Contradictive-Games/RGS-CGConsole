@@ -14,7 +14,7 @@ namespace ContradictiveGames.CGConsole
 
         public TestingClass()
         {
-            ConsoleCommandRegistry.RegisterCommandsFrom(this);
+            CGConsoleCommands.RegisterCommandsFrom(this);
         }
     }
 
@@ -51,7 +51,7 @@ namespace ContradictiveGames.CGConsole
         {
             base.Start();
 
-            ConsoleCommandRegistry.RegisterCommandsFrom(class2);
+            CGConsoleCommands.RegisterCommandsFrom(class2);
         }
 
 

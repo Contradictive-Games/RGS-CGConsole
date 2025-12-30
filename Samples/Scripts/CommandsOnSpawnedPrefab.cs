@@ -20,7 +20,7 @@ namespace ContradictiveGames.CGConsole
      
         public void RegisterCommands()
         {
-            ConsoleCommandRegistry.RegisterCommandsFrom(this);
+            CGConsoleCommands.RegisterCommandsFrom(this);
         }
     
     }

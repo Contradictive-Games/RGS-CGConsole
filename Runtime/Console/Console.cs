@@ -57,7 +57,7 @@ namespace ContradictiveGames.CGConsole
 
         protected virtual void Start()
         {
-            ConsoleCommandRegistry.RegisterAllCommands();
+            CGConsoleCommands.RegisterAllCommands();
         }
 
 
@@ -106,7 +106,7 @@ namespace ContradictiveGames.CGConsole
 
         protected virtual void OnCommandSubmitted(string input)
         {
-            CommandResponse response = ConsoleCommandRegistry.TryExecute(input);
+            CommandResponse response = CGConsoleCommands.TryExecute(input);
             if(Settings.ShowCommandResponseLogs) 
             {
                 CreateConsoleOutput(response.Message, "", response.ResponseType != ResponseType.Success ? LogType.Error : LogType.Assert);

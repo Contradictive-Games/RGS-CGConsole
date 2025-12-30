@@ -8,7 +8,7 @@
 
 This is a part of RGS (Re-usable Game Systems) that I have created to help potentially speed up game development.
 
-Within the `Runtime/Samples` folder, there is a prefab that contains an example version of a DeveloperConsole with a working UI. If you are to use this, you can create a `ConsoleSettings` ScriptableObject that allows you to drag and drop different user-created themes. 
+Within the `Runtime/Samples` folder, there is a prefab that contains an example version of a custom Console with a working UI. If you are to use this, you can create a `ExampleConsoleSettings` ScriptableObject that allows you to drag and drop different user-created themes. 
 
 To create this ScriptableObject just simply right-click anywhere within the Project window, and in the ContextMenu select the 'CGConsole Settings" option.
 
@@ -77,7 +77,7 @@ To begin using any commands you create, you must register these commands. There'
 #### Register All Commands
 
 ```cs
-ConsoleCommandRegistry.RegisterAllCommands();
+CGConsoleCommands.RegisterAllCommands();
 ```
 
 This will register all `[ConsoleCmd]` attributes and their functions from all MonoBehaviors that have implemented `ICommandProvider` and are actively in the scene when this function was called. If you are utilizing the `Console` class in any way - this is called within the `Start` function.
@@ -90,7 +90,7 @@ This will register all `[ConsoleCmd]` attributes and their functions from all Mo
 When manually registering commands, just do:
 
 ```cs
-ConsoleCommandRegistry.RegisterCommandsFrom(this)
+CGConsoleCommands.RegisterCommandsFrom(this)
 ```
 
 Calling this function does **not** require the class to implement `ICommandProvider`.
@@ -159,7 +159,7 @@ Commands can both be executed within a script and by typing the command within t
 To execute a command within a script you can do:
 
 ```csharp
-ConsoleCommandRegistry.TryExecute("command_goes_here");
+CGConsoleCommands.TryExecute("command_goes_here");
 ```
 
 The `TryExecute` method returns a `CommandResponse` which looks like:
@@ -185,7 +185,7 @@ public struct CommandResponse
 }
 ```
 
-The `ConsoleCommandRegistry` handles the building of the `CommandResponse`.
+The `CGConsoleCommands` class handles the building of the `CommandResponse`.
 
 
 

@@ -19,18 +19,18 @@ namespace ContradictiveGames.CGConsole
                     delegate { LogAStatementFromASpawnedPrefab(); }
                 );
             }
-            if (LogWarningButton != null) LogWarningButton.onClick.AddListener(() => ConsoleCommandRegistry.TryExecute("log_warning"));
-            if (LogErrorButton != null) LogErrorButton.onClick.AddListener(() => ConsoleCommandRegistry.TryExecute("log_error"));
+            if (LogWarningButton != null) LogWarningButton.onClick.AddListener(() => CGConsoleCommands.TryExecute("log_warning"));
+            if (LogErrorButton != null) LogErrorButton.onClick.AddListener(() => CGConsoleCommands.TryExecute("log_error"));
         }
 
         public void LogStatementButtonPress()
         {
-            ConsoleCommandRegistry.TryExecute("log_nice");
+            CGConsoleCommands.TryExecute("log_nice");
         }
 
         public void LogNumberFiveButtonPress()
         {
-            ConsoleCommandRegistry.TryExecute("log_number 5");
+            CGConsoleCommands.TryExecute("log_number 5");
         }
 
 
@@ -42,7 +42,7 @@ namespace ContradictiveGames.CGConsole
 
         private void LogAStatementFromASpawnedPrefab()
         {
-            ConsoleCommandRegistry.TryExecute("order_66");
+            CGConsoleCommands.TryExecute("order_66");
         }
         
     }

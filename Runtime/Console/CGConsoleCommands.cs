@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ContradictiveGames.CGConsole
 {
-    public class ConsoleCommandRegistry
+    public class CGConsoleCommands
     {
         private static readonly Dictionary<string, ConsoleCommand> allCommands = new(){ 
             { 
@@ -14,7 +14,7 @@ namespace ContradictiveGames.CGConsole
                 new ConsoleCommand(
                     "help", 
                     "List all available console commands", 
-                    typeof(ConsoleCommandRegistry).GetMethod(nameof(ShowHelp), BindingFlags.Static | BindingFlags.NonPublic), 
+                    typeof(CGConsoleCommands).GetMethod(nameof(ShowHelp), BindingFlags.Static | BindingFlags.NonPublic), 
                     new ParameterInfo[0],
                     null
                 ) 

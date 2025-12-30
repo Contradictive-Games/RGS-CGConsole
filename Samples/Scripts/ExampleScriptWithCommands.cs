@@ -38,7 +38,7 @@ namespace ContradictiveGames.CGConsole
         //Interface implementation
         public void RegisterCommands()
         {
-            ConsoleCommandRegistry.RegisterCommandsFrom(this);
+            CGConsoleCommands.RegisterCommandsFrom(this);
         }
     }
 }
