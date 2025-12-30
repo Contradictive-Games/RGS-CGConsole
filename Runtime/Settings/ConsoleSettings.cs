@@ -21,7 +21,9 @@ namespace ContradictiveGames.CGConsole
         [Header("Additional Settings")]
         [Tooltip("How many output logs can be held within the parent container at most?")]
         public int MaxLines = 800;
-        public bool ShowStackTrace = true;     
+
+        [Tooltip("When we logging anything to the console - do we want to also display the StackTrace?")]
+        public bool ShowStackTrace = false;
 
         [Tooltip("If you want to see the error for why a command couldn't execute, or see the success message upon it executing properly")]
         public bool ShowCommandResponseLogs = true;

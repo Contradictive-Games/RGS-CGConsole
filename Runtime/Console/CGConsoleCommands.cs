@@ -22,6 +22,8 @@ namespace ContradictiveGames.CGConsole
         };
         public static string CommandHelpString { get; private set; }
 
+        private static bool enableLogging = true;
+
 
         #region Command Registration
 
@@ -34,7 +36,7 @@ namespace ContradictiveGames.CGConsole
                 if (mustBeCommandProvider && obj is ICommandProvider) RegisterCommandsFrom(obj);
                 else if(!mustBeCommandProvider) RegisterCommandsFrom(obj);
             }
-            Debug.Log($"Successfully registered {allCommands.Count} commands. Type `help` into the console to see all available commands.");
+            if(enableLogging) Debug.Log($"(CG Console) Successfully registered {allCommands.Count} commands. Type `help` into the console to see all available commands.");
         }
 
 
@@ -58,7 +60,7 @@ namespace ContradictiveGames.CGConsole
                 }
             }
 
-            Debug.Log($"Registered `{cmdName}` command from {target}");
+            if(enableLogging) Debug.Log($"(CG Console) Registered `{cmdName}` command from {target}");
 
             UpdateHelpString();
         }

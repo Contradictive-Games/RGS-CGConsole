@@ -210,7 +210,6 @@ Console Commands really only work with supporting basic types like `string`, `in
 There is one default command being `help` - which will log all commands and their descriptions.
 
 
-
 ## Stretch
 
 Features that are not currently in this package, but I would eventually like to add
