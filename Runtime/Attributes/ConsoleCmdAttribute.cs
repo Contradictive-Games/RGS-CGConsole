@@ -3,7 +3,7 @@ using System;
 namespace ContradictiveGames.CGConsole
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class ConsoleCmdAttribute : Attribute
+    public sealed class ConsoleCmdAttribute : Attribute
     {
         public string CommandFormat { get; }
         public string Description { get; }

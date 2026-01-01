@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ContradictiveGames.CGConsole
 {
-    public class CGConsoleCommands
+    public static class CGConsoleCommands
     {
         private static readonly Dictionary<string, ConsoleCommand> allCommands = new(){ 
             { 
@@ -22,7 +22,7 @@ namespace ContradictiveGames.CGConsole
         };
         public static string CommandHelpString { get; private set; }
 
-        private static bool enableLogging = true;
+        private static bool enableLogging = false;
 
 
         #region Command Registration
@@ -69,7 +69,6 @@ namespace ContradictiveGames.CGConsole
         #endregion
 
         #region Command Execution
-
 
         public static CommandResponse TryExecute(string input)
         {

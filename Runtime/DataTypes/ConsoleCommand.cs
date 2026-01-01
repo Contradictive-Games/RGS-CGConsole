@@ -2,13 +2,13 @@ using System.Reflection;
 
 namespace ContradictiveGames.CGConsole
 {
-    public class ConsoleCommand
+    public sealed class ConsoleCommand
     {
-        public string Command;
-        public string Description;
-        public MethodInfo MethodToExecute;
-        public ParameterInfo[] Parameters;
-        public object Target;
+        public readonly string Command;
+        public readonly string Description;
+        public readonly MethodInfo MethodToExecute;
+        public readonly ParameterInfo[] Parameters;
+        public readonly object Target;
 
         public ConsoleCommand(string command, string description, MethodInfo methodToExecute, ParameterInfo[] parameters, object target)
         {

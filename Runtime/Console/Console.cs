@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace ContradictiveGames.CGConsole
 {
-    [AddComponentMenu("CGConsole/Console")]
+    [AddComponentMenu("ContradictiveGames/CGConsole/Console")]
     public class Console : MonoBehaviour
     {
         [Header("Console Components")]
