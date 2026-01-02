@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,11 @@ namespace ContradictiveGames.CGConsole
         [SerializeField] private RectTransform consoleOutputContainer;
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private TMP_Text consoleOutputPrefab;
+
+        [Header("Auto-Complete")]
+        [SerializeField] private bool autoCompleteEnabled = true;
+        [SerializeField] private GameObject autoCompletePopup;
+        [SerializeField] private TMP_Text autoCompleteText;
 
         [Header("Settings")]
         public ConsoleSettings Settings;
@@ -51,6 +57,11 @@ namespace ContradictiveGames.CGConsole
             if(consoleInput != null)
             {
                 consoleInput.onSubmit.AddListener(OnCommandSubmitted);
+                if(autoCompleteEnabled && autoCompletePopup != null && autoCompleteText!= null)
+                {
+                    consoleInput.onValueChanged.AddListener(OnInputFieldUpdated);
+                    autoCompletePopup.SetActive(false);
+                }
             }
         }
 
@@ -73,6 +84,8 @@ namespace ContradictiveGames.CGConsole
             if(consoleOutputPrefab == null) Debug.LogWarning($"We currently do not have any console output prefab created within the inspector. One will be created by default but it is recommended to make one yourself", this);
             if(consoleOutputContainer == null) Debug.LogError($"We currently do not have a parent container for console output", this);
             if(scrollRect == null) Debug.LogWarning($"We currently do not have a scroll rect set for the console", this);
+            if(autoCompleteEnabled && autoCompletePopup == null) Debug.LogWarning("We have enabled auto-complete but we don't have anything to display our command auto-completion", this);
+            if(autoCompleteEnabled && autoCompleteText == null) Debug.LogWarning("We have enabled auto-complete but we don't have a text component setup to display our command auto-completes", this);
         }
 #endif
 
@@ -115,9 +128,34 @@ namespace ContradictiveGames.CGConsole
             if(response.ResponseType == ResponseType.Success)
             {
                 consoleInput.text = "";
+                autoCompletePopup.SetActive(false);
             }
 
             consoleInput.ActivateInputField();
+        }
+
+
+        protected virtual void OnInputFieldUpdated(string input)
+        {
+            if(input.Length == 0 || input.Contains(" ")) {
+                if(autoCompletePopup.activeInHierarchy) autoCompletePopup.SetActive(false);
+                return;
+            }
+            
+            List<string> commands = CGConsoleCommands.GetCommandAutoComplete(input);
+            if(commands.Count == 0) {
+                autoCompletePopup.SetActive(false);
+                autoCompleteText.SetText("");
+                return;
+            }
+
+            autoCompletePopup.SetActive(true);
+            string txt = "";
+            foreach(var cmd in commands)
+            {
+                txt += cmd + "\n";
+            }
+            autoCompleteText.SetText(txt);
         }
 
 

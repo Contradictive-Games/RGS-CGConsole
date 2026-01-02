@@ -20,8 +20,10 @@ namespace ContradictiveGames.CGConsole
                 ) 
             }
         };
-        public static string CommandHelpString { get; private set; }
+        private static HashSet<string> commandsList = new();
 
+        private static string commandHelpString;
+        private static bool registeredDefaultCommandsForAutoComplete = false;
         private static bool enableLogging = false;
 
 
@@ -51,16 +53,26 @@ namespace ContradictiveGames.CGConsole
                 
                 if (attr != null)
                 {
-                    cmdName = attr.CommandFormat.Split(' ')[0];
+                    cmdName = attr.CommandFormat.Split(' ')[0].ToLower();
                     ParameterInfo[] @params = method.GetParameters();
                     
                     if(allCommands.ContainsKey(cmdName)) return;
 
                     allCommands.Add(cmdName, new ConsoleCommand(cmdName, attr.Description, method, @params, target));
+                    commandsList.Add(cmdName);
                 }
             }
 
             if(enableLogging) Debug.Log($"(CG Console) Registered `{cmdName}` command from {target}");
+
+            if (!registeredDefaultCommandsForAutoComplete)
+            {
+                foreach(var (_cmdName, _) in allCommands)
+                {
+                    commandsList.Add(_cmdName);
+                }
+                registeredDefaultCommandsForAutoComplete = true;
+            }
 
             UpdateHelpString();
         }
@@ -78,7 +90,8 @@ namespace ContradictiveGames.CGConsole
                 return new CommandResponse(ResponseType.Invalid, "Command was empty");
             }
 
-            string cmd = parts[0];
+            string cmd = parts[0].ToLower();
+            
             if (!allCommands.TryGetValue(cmd, out ConsoleCommand command))
             {
                 return new CommandResponse(ResponseType.Error, $"Command `{cmd}` was not found, or was not registered properly");
@@ -88,7 +101,6 @@ namespace ContradictiveGames.CGConsole
             {
                 return new CommandResponse(ResponseType.Error, $"Could not find any valid targets for `{cmd}");
             }
-
 
             object[] parameters = new object[command.Parameters.Length];
             for (int i = 0; i < command.Parameters.Length; i++)
@@ -120,9 +132,23 @@ namespace ContradictiveGames.CGConsole
 
         #region Utilities
 
+        public static List<string> GetCommandAutoComplete(string input)
+        {
+            List<string> commands = new();
+            if(input.Length == 0) return commands;
+
+            foreach(String s in commandsList)
+            {
+                if(s.Contains(input)) commands.Add(s);
+            }
+
+            return commands;
+        }
+
+
         private static void ShowHelp()
         {
-            Debug.Log(CommandHelpString);
+            Debug.Log(commandHelpString);
         }
 
 
@@ -133,7 +159,7 @@ namespace ContradictiveGames.CGConsole
             {
                 response += $"{cmd.Command}" + (!String.IsNullOrWhiteSpace(cmd.Description) ? "     |       description: " + cmd.Description : "") + "\n";
             }
-            CommandHelpString = response;
+            commandHelpString = response;
 
         }
 
