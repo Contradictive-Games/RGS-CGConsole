@@ -132,10 +132,9 @@ namespace ContradictiveGames.CGConsole
 
         #region Utilities
 
-        public static List<string> GetCommandAutoComplete(string input)
+        public static HashSet<string> GetCommandAutoComplete(string input)
         {
-            List<string> commands = new();
-            if(input.Length == 0) return commands;
+            HashSet<string> commands = new();
 
             foreach(String s in commandsList)
             {
@@ -157,7 +156,7 @@ namespace ContradictiveGames.CGConsole
             string response = "Commands List: \n";
             foreach (var (_, cmd) in allCommands)
             {
-                response += $"{cmd.Command}" + (!String.IsNullOrWhiteSpace(cmd.Description) ? "     |       description: " + cmd.Description : "") + "\n";
+                response += $"{cmd.Command}" + (!String.IsNullOrWhiteSpace(cmd.Description) ? "     (" + cmd.Description + ")" : "") + "\n";
             }
             commandHelpString = response;
 

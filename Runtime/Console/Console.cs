@@ -142,7 +142,7 @@ namespace ContradictiveGames.CGConsole
                 return;
             }
             
-            List<string> commands = CGConsoleCommands.GetCommandAutoComplete(input);
+            HashSet<string> commands = CGConsoleCommands.GetCommandAutoComplete(input);
             if(commands.Count == 0) {
                 autoCompletePopup.SetActive(false);
                 autoCompleteText.SetText("");
