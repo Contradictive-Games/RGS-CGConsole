@@ -2,6 +2,17 @@ using UnityEngine;
 
 namespace ContradictiveGames.CGConsole
 {
+    public struct ExampleStruct
+    {
+        public int X;
+        public int Y;
+
+        public ExampleStruct(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+    }
     public class ExampleScriptWithCommands : MonoBehaviour, ICommandProvider
     {
         private void Awake()
@@ -16,7 +27,7 @@ namespace ContradictiveGames.CGConsole
             Debug.Log("I hope you have a great day!");
         }
 
-        [ConsoleCmd("log_number {int}", "Log any number you would like to see")]
+        [ConsoleCmd("log_number", "Log any number you would like to see")]
         private void LogANumber(int number)
         {
             Debug.Log($"Great choice! Your number was: {number}");
@@ -34,7 +45,11 @@ namespace ContradictiveGames.CGConsole
             Debug.LogError($"We just logged an error!");
         }
 
-        
+        [ConsoleCmd("logstruct")]
+        public void LogAStruct(ExampleStruct st)
+        {
+            Debug.LogWarning($"We got it! X: {st.X} // Y: {st.Y}");
+        }
         //Interface implementation
         public void RegisterCommands()
         {

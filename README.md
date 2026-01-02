@@ -59,9 +59,14 @@ public void MyExampleCommand(){
     Debug.Log("We succesfully executed the `log_normal` command");
 }
 
-[ConsoleCmd("log_number {int}")]
+[ConsoleCmd("log_number")]
 public void MyExampleCommandWithArgs(int arg){
     Debug.Log($"Your number was: {arg}");
+    /*
+        If we were to try to execute this command either as: `log_number` without any additional args, or with an incorrect arg
+        it will not succeed. So long as we provide the int when executing the command, it will work
+        `log_number 5` would succeed
+    */
 }
 
 [ConsoleCmd("game_state", "Log the game's current state")]
