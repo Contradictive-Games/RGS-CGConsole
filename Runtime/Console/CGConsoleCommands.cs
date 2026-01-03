@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using Codice.Client.BaseCommands;
 using UnityEngine;
 
 
@@ -92,6 +94,10 @@ namespace ContradictiveGames.CGConsole
             }
 
             string cmd = parts[0].ToLower();
+            if (cmd.EndsWith("?"))
+            {
+                return LogCommandHelp(cmd.Remove(cmd.Length - 1));
+            }
             
             if (!allCommands.TryGetValue(cmd, out ConsoleCommand command))
             {
@@ -124,7 +130,28 @@ namespace ContradictiveGames.CGConsole
             }
 
             command.MethodToExecute.Invoke(command.Target, parameters);
-            return new CommandResponse(ResponseType.Success, "Success");
+            return new CommandResponse(ResponseType.Success);
+        }
+
+
+
+        private static CommandResponse LogCommandHelp(string command)
+        {
+            if(allCommands.TryGetValue(command, out ConsoleCommand cmd))
+            {
+                string parameters = "Args: ";
+                if(cmd.Parameters.Length == 0) parameters += "No args required";
+                else
+                {
+                    foreach(var param in cmd.Parameters)
+                    {
+                        parameters += param.ParameterType + " ";
+                    }
+                }
+                Debug.Log($"{(!String.IsNullOrWhiteSpace(cmd.Description) ? cmd.Description : "No description was provided.")} // {parameters}");
+                return new CommandResponse(ResponseType.Help);
+            }
+            return new CommandResponse(ResponseType.Invalid, $"No command found by name: `{command}`");
         }
 
 

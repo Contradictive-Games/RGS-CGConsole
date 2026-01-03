@@ -126,7 +126,7 @@ namespace ContradictiveGames.CGConsole
         protected virtual void OnCommandSubmitted(string input)
         {
             CommandResponse response = CGConsoleCommands.TryExecute(input);
-            if(Settings.ShowCommandResponseLogs) 
+            if(Settings.ShowCommandResponseLogs && !String.IsNullOrWhiteSpace(response.Message)) 
             {
                 CreateConsoleOutput(response.Message, "", response.ResponseType != ResponseType.Success ? LogType.Error : LogType.Assert);
             }

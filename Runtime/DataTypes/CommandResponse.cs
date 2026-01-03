@@ -4,6 +4,7 @@ namespace ContradictiveGames.CGConsole
     {
         Success,
         Invalid,
+        Help,
         Error
     }
     
@@ -12,7 +13,7 @@ namespace ContradictiveGames.CGConsole
         public readonly ResponseType ResponseType;
         public readonly string Message;
 
-        public CommandResponse(ResponseType responseType, string message)
+        public CommandResponse(ResponseType responseType, string message = "")
         {
             ResponseType = responseType;
             Message = message;
