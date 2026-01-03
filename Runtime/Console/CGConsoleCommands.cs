@@ -14,6 +14,7 @@ namespace ContradictiveGames.CGConsole
                 new ConsoleCommand(
                     "help", 
                     "List all available console commands", 
+                    true,
                     typeof(CGConsoleCommands).GetMethod(nameof(ShowHelp), BindingFlags.Static | BindingFlags.NonPublic), 
                     new ParameterInfo[0],
                     null
@@ -58,8 +59,8 @@ namespace ContradictiveGames.CGConsole
                     
                     if(allCommands.ContainsKey(cmdName)) return;
 
-                    allCommands.Add(cmdName, new ConsoleCommand(cmdName, attr.Description, method, @params, target));
-                    commandsList.Add(cmdName);
+                    allCommands.Add(cmdName, new ConsoleCommand(cmdName, attr.Description, attr.HideFromAutoComplete, method, @params, target));
+                    if(!attr.HideFromAutoComplete) commandsList.Add(cmdName);
                 }
             }
 
@@ -67,9 +68,9 @@ namespace ContradictiveGames.CGConsole
 
             if (!registeredDefaultCommandsForAutoComplete)
             {
-                foreach(var (_cmdName, _) in allCommands)
+                foreach(var (_cmdName, _cmd) in allCommands)
                 {
-                    commandsList.Add(_cmdName);
+                    if(!_cmd.HideFromAutoComplete) commandsList.Add(_cmdName);
                 }
                 registeredDefaultCommandsForAutoComplete = true;
             }
