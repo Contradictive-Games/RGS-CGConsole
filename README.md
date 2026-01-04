@@ -48,6 +48,9 @@ The second thing we require is a `RectTransform` in which the console's output l
 
 ## Example Command Usage and Creation
 
+### Setting Up CGConsole's Settings
+
+
 
 ### Attribute Usage
 
@@ -118,33 +121,14 @@ This will register all `[ConsoleCmd]` attributes and their functions from the Mo
 
 #### Registering Commands From A Class
 
-Classes can support console commands as well, and are not required to implement `ICommandProvider`. More often than not, I would just recommend registering commands within the class's constructor.
+Classes can support console commands as well, and are not required to implement `ICommandProvider`. Just ensure that you properly register that class' commands by calling the `RegisterCommandsFrom(object target)` function.
+
 
 ```cs
 public class TestClass
 {
-    //Properties...
-    
-    [ConsoleCmd("test_command")]
-    public void MyCommandFunctionWithinAClass(){
-        //Do something
-    }
-
-    //Constructor
-    public TestClass(){
-        //Set values
-        ConsoleCommandRegister.RegisterCommandsFrom(this);
-    }
-}
-```
-
-You can of course also do the following if you would rather not do it within the constructor:
-
-```cs
-public class AnotherTestClass
-{
     //Properties
-    [ConsoleCmd("another_test_command")]
+    [ConsoleCmd("test_command")]
     public void ExampleFunction(){
         //Do something
     }
@@ -154,7 +138,7 @@ public class AnotherTestClass
 public class TestMonoBehavior : MonoBehavior
 {
 
-    public AnotherTestClass MyClass = new();
+    public TestClass MyClass = new();
     
     private void Start()
     {
@@ -187,6 +171,7 @@ public enum ResponseType
 {
     Success,
     Invalid,
+    Info, //Generally just used for help commands
     Error
 }
 

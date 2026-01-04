@@ -23,11 +23,12 @@ namespace ContradictiveGames.CGConsole
                 ) 
             }
         };
-        private static HashSet<string> commandNameList = new();
+        private readonly static HashSet<string> commandNameList = new();
+        private static DefaultCommands defaultCommandsInstance;
 
         private static string commandHelpString;
-        private static bool registeredDefaultCommandsForAutoComplete = false;
-        private static bool enableLogging = false;
+        
+        private static bool registeredDefaultCommands = false;
 
         private const string regex = "^[a-zA-Z0-9_]+$";
 
@@ -42,12 +43,29 @@ namespace ContradictiveGames.CGConsole
                 if (mustBeCommandProvider && obj is ICommandProvider) RegisterCommandsFrom(obj);
                 else if(!mustBeCommandProvider) RegisterCommandsFrom(obj);
             }
-            if(enableLogging) Debug.Log($"(CG Console) Successfully registered {allCommands.Count} commands. Type `help` into the console to see all available commands.");
+            
+            if(
+                CGConsolePackageSettings.Instance != null && 
+                CGConsolePackageSettings.Instance.EnableLoggingForCommandRegistration
+            )
+            {
+                Debug.Log($"(CG Console) Successfully registered {allCommands.Count} commands. Type `help` into the console to see all available commands.");
+            }
         }
 
 
         public static void RegisterCommandsFrom(object target)
         {
+            CGConsolePackageSettings settings = CGConsolePackageSettings.Instance;
+            bool requireInterface = false;
+            if(settings != null)
+            {
+                requireInterface = settings.RequireInterfaceForRegistration;
+            }
+
+            if(requireInterface && target is not ICommandProvider) return;
+
+            
             var methods = target.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             string cmdName = "";
 
@@ -56,51 +74,62 @@ namespace ContradictiveGames.CGConsole
                 var attr = method.GetCustomAttribute<ConsoleCmdAttribute>();
                 if(attr == null) continue;
                 
-                cmdName = attr.CommandName.ToLower().Trim();
+                cmdName = attr.CommandName;
+
+                if(!CommandIsValid(cmdName)) continue;
                 
-                if(!Regex.IsMatch(cmdName, regex))
-                {
-                    Debug.LogError("Received an invalid command format. Please remove any special characters and whitespace. Cmd: " + cmdName);
-                    continue;
-                }
                 
-                if(allCommands.ContainsKey(cmdName)) continue;
-                
-                ParameterInfo[] @params = method.GetParameters();
-                allCommands.Add(
-                    cmdName, 
-                    new ConsoleCommand(
-                        cmdName, 
-                        attr.Description, 
-                        attr.HideFromAutoComplete,
-                        attr.HideFromHelpCommand, 
-                        method, 
-                        @params, 
-                        target
-                ));
+                AddNewConsoleCommand(cmdName, attr, method, target);
 
                 if(!attr.HideFromAutoComplete) commandNameList.Add(cmdName);
                 
             }
 
-            if(enableLogging) Debug.Log($"(CG Console) Registered `{cmdName}` command from {target}");
-
-            if (!registeredDefaultCommandsForAutoComplete)
+            if(
+                CGConsolePackageSettings.Instance != null && 
+                CGConsolePackageSettings.Instance.EnableLoggingForCommandRegistration)
             {
-                foreach(var (_cmdName, _cmd) in allCommands)
-                {
-                    if(!_cmd.HideFromAutoComplete) commandNameList.Add(_cmdName);
-                }
-                registeredDefaultCommandsForAutoComplete = true;
+                
+                Debug.Log($"(CG Console) Registered `{cmdName}` command from {target}");
             }
 
+            RegisterDefaultCommands();
+
             UpdateHelpString();
+        }
+
+
+        private static void RegisterCommandsFromSelectively(object target)
+        {
+            var settings = CGConsolePackageSettings.Instance;
+            if(settings == null) return;
+
+            var methods = target.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            int registeredCount = 0;
+            foreach(var method in methods)
+            {
+                var attr = method.GetCustomAttribute<ConsoleCmdAttribute>();
+                if(attr == null) continue;
+
+                string cmdName = attr.CommandName;
+
+                if (!settings.IsCommandEnabled(cmdName) || !CommandIsValid(cmdName)) continue;
+
+
+                AddNewConsoleCommand(cmdName, attr, method, target);
+
+                if(!attr.HideFromAutoComplete) commandNameList.Add(cmdName);
+                registeredCount++;
+            }
+
+            if(registeredCount > 0 && settings.EnableLoggingForCommandRegistration) Debug.Log($"Successfully registered {registeredCount} default commands");
         }
 
 
         #endregion
 
         #region Command Execution
+
 
         public static CommandResponse TryExecute(string input)
         {
@@ -174,8 +203,90 @@ namespace ContradictiveGames.CGConsole
 
         #endregion
 
+        #region Default Commands
+
+
+        private static void RegisterDefaultCommands()
+        {
+            if(registeredDefaultCommands) return;
+
+            var settings = CGConsolePackageSettings.Instance;
+            if(settings == null) return;
+
+            if (settings.IsCommandEnabled("help") && CommandIsValid("help"))
+            {
+                allCommands.Add(
+                    "help", 
+                    new ConsoleCommand(
+                        "help", 
+                        "List all available console commands", 
+                        hideFromAutoComplete: true,
+                        hideFromHelpCommand: true,
+                        typeof(CGConsoleCommands).GetMethod(nameof(ShowHelp), BindingFlags.Static | BindingFlags.NonPublic), 
+                        new ParameterInfo[0],
+                        null
+                ));
+            }
+
+            defaultCommandsInstance = new();
+            RegisterCommandsFromSelectively(defaultCommandsInstance);
+
+            registeredDefaultCommands = true;
+        }
+
+        
+        private static void ShowHelp()
+        {
+            Debug.Log(commandHelpString);
+        }
+
+
+        #endregion
 
         #region Utilities
+
+
+        private static ConsoleCommand AddNewConsoleCommand(string cmdName, ConsoleCmdAttribute attr, MethodInfo method, object target)
+        {
+            ParameterInfo[] @params = method.GetParameters();
+            
+            ConsoleCommand cmd = new ConsoleCommand
+            (
+                cmdName,
+                attr.Description,
+                attr.HideFromAutoComplete,
+                attr.HideFromHelpCommand,
+                method,
+                @params,
+                target
+            );
+            allCommands.Add(cmdName, cmd);
+
+            return cmd;
+        }
+
+
+        private static bool CommandIsValid(string cmdName)
+        {
+            cmdName.ToLower().Trim();
+
+            var settings = CGConsolePackageSettings.Instance;
+            if(settings == null) 
+
+            if(!Regex.IsMatch(cmdName, regex))
+            {
+                Debug.LogError($"Received invalid command format. Please remove special characters (excluding underscores). Cmd: {cmdName}");
+                return false;
+            }
+            if(allCommands.ContainsKey(cmdName))
+            {
+                if (settings != null && settings.EnableLoggingForCommandRegistration) Debug.LogError($"Command `{cmdName}` has already been registered.");
+                return false;
+            }
+
+            return true;
+        }
+
 
         public static HashSet<string> GetCommandAutoComplete(string input)
         {
@@ -187,12 +298,6 @@ namespace ContradictiveGames.CGConsole
             }
 
             return commands;
-        }
-
-
-        private static void ShowHelp()
-        {
-            Debug.Log(commandHelpString);
         }
 
 

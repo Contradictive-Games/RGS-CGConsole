@@ -4,29 +4,6 @@ using TMPro;
 
 namespace ContradictiveGames.CGConsole
 {
-    public class TestingClass
-    {
-        [ConsoleCmd("testing")]
-        public void TestingFunction()
-        {
-            Debug.Log("We just successfully tested a function within a class that had their commands registered in the constructor");
-        }
-
-        public TestingClass()
-        {
-            CGConsoleCommands.RegisterCommandsFrom(this);
-        }
-    }
-
-    public class TestingClassNumberTwo
-    {
-        [ConsoleCmd("testing_again")]
-        public void TestingFunctionNumberTwo()
-        {
-            Debug.Log("We just succesfully tested a function within a class that had their commands registered in the MonoBehavior");
-        }
-    }
-
     public class ExampleConsole : Console
     {
         
@@ -42,17 +19,6 @@ namespace ContradictiveGames.CGConsole
         [SerializeField] private TMP_Text inputFieldPlaceholder;
         [SerializeField] private Image scrollBarHandle;
         [SerializeField] private Image scrollBarBackground;
-
-        public TestingClass @class = new();
-        public TestingClassNumberTwo class2 = new();
-
-
-        protected override void Start()
-        {
-            base.Start();
-
-            CGConsoleCommands.RegisterCommandsFrom(class2);
-        }
 
 
         [ContextMenu("Apply Theme")]

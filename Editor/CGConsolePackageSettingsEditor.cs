@@ -8,6 +8,7 @@ namespace ContradictiveGames.CGConsole.Editor
     {
         private SerializedProperty enableLogging;
         private SerializedProperty defaultCommands;
+        private SerializedProperty forceInterfaceRequirement;
 
         private void OnEnable()
         {
@@ -15,6 +16,7 @@ namespace ContradictiveGames.CGConsole.Editor
 
             enableLogging = serializedObject.FindProperty("EnableLoggingForCommandRegistration");
             defaultCommands = serializedObject.FindProperty("DefaultCommands");
+            forceInterfaceRequirement = serializedObject.FindProperty("RequireInterfaceForRegistration");
         }
 
         public override void OnInspectorGUI()
@@ -30,12 +32,12 @@ namespace ContradictiveGames.CGConsole.Editor
             EditorGUILayout.HelpBox("These settings control the behavior of the CG Console package.", MessageType.Info);
             EditorGUILayout.Space(5);
 
-            EditorGUILayout.LabelField("Logging", EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(enableLogging);
-                EditorGUILayout.HelpBox("Do you want it to be logged every single time a command is registered?", MessageType.Info);
-            EditorGUI.indentLevel--;
-            EditorGUILayout.Space(10);
+            EditorGUILayout.PropertyField(enableLogging);
+            EditorGUILayout.Space(5);
+
+
+            EditorGUILayout.PropertyField(forceInterfaceRequirement);
+            EditorGUILayout.Space(15);
             
 
             EditorGUILayout.LabelField("Default Commands", EditorStyles.boldLabel);
