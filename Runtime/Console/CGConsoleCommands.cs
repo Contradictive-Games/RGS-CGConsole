@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Codice.Client.BaseCommands;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 
@@ -16,19 +15,21 @@ namespace ContradictiveGames.CGConsole
                 new ConsoleCommand(
                     "help", 
                     "List all available console commands", 
-                    true,
+                    hideFromAutoComplete: true,
+                    hideFromHelpCommand: true,
                     typeof(CGConsoleCommands).GetMethod(nameof(ShowHelp), BindingFlags.Static | BindingFlags.NonPublic), 
                     new ParameterInfo[0],
                     null
                 ) 
             }
         };
-        private static HashSet<string> commandsList = new();
+        private static HashSet<string> commandNameList = new();
 
         private static string commandHelpString;
         private static bool registeredDefaultCommandsForAutoComplete = false;
         private static bool enableLogging = false;
 
+        private const string regex = "^[a-zA-Z0-9_]+$";
 
         #region Command Registration
 
@@ -53,17 +54,33 @@ namespace ContradictiveGames.CGConsole
             foreach (var method in methods)
             {
                 var attr = method.GetCustomAttribute<ConsoleCmdAttribute>();
+                if(attr == null) continue;
                 
-                if (attr != null)
+                cmdName = attr.CommandName.ToLower().Trim();
+                
+                if(!Regex.IsMatch(cmdName, regex))
                 {
-                    cmdName = attr.CommandFormat.Split(' ')[0].ToLower();
-                    ParameterInfo[] @params = method.GetParameters();
-                    
-                    if(allCommands.ContainsKey(cmdName)) return;
-
-                    allCommands.Add(cmdName, new ConsoleCommand(cmdName, attr.Description, attr.HideFromAutoComplete, method, @params, target));
-                    if(!attr.HideFromAutoComplete) commandsList.Add(cmdName);
+                    Debug.LogError("Received an invalid command format. Please remove any special characters and whitespace. Cmd: " + cmdName);
+                    continue;
                 }
+                
+                if(allCommands.ContainsKey(cmdName)) continue;
+                
+                ParameterInfo[] @params = method.GetParameters();
+                allCommands.Add(
+                    cmdName, 
+                    new ConsoleCommand(
+                        cmdName, 
+                        attr.Description, 
+                        attr.HideFromAutoComplete,
+                        attr.HideFromHelpCommand, 
+                        method, 
+                        @params, 
+                        target
+                ));
+
+                if(!attr.HideFromAutoComplete) commandNameList.Add(cmdName);
+                
             }
 
             if(enableLogging) Debug.Log($"(CG Console) Registered `{cmdName}` command from {target}");
@@ -72,7 +89,7 @@ namespace ContradictiveGames.CGConsole
             {
                 foreach(var (_cmdName, _cmd) in allCommands)
                 {
-                    if(!_cmd.HideFromAutoComplete) commandsList.Add(_cmdName);
+                    if(!_cmd.HideFromAutoComplete) commandNameList.Add(_cmdName);
                 }
                 registeredDefaultCommandsForAutoComplete = true;
             }
@@ -149,7 +166,7 @@ namespace ContradictiveGames.CGConsole
                     }
                 }
                 Debug.Log($"{(!String.IsNullOrWhiteSpace(cmd.Description) ? cmd.Description : "No description was provided.")} // {parameters}");
-                return new CommandResponse(ResponseType.Help);
+                return new CommandResponse(ResponseType.Info);
             }
             return new CommandResponse(ResponseType.Invalid, $"No command found by name: `{command}`");
         }
@@ -164,7 +181,7 @@ namespace ContradictiveGames.CGConsole
         {
             HashSet<string> commands = new();
 
-            foreach(String s in commandsList)
+            foreach(String s in commandNameList)
             {
                 if(s.Contains(input)) commands.Add(s);
             }
@@ -184,6 +201,7 @@ namespace ContradictiveGames.CGConsole
             string response = "Commands List: \n";
             foreach (var (_, cmd) in allCommands)
             {
+                if(cmd.HideFromHelpCommand) continue;
                 response += $"{cmd.Command}" + (!String.IsNullOrWhiteSpace(cmd.Description) ? "     (" + cmd.Description + ")" : "") + "\n";
             }
             commandHelpString = response;

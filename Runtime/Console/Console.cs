@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace ContradictiveGames.CGConsole
 {
     [AddComponentMenu("ContradictiveGames/CGConsole/Console")]
     public class Console : MonoBehaviour
     {
+        public static Console Instance { get; private set; }
+
         [Header("Console Components")]
         [SerializeField] private TMP_InputField consoleInput;
         [SerializeField] private RectTransform consoleOutputContainer;
@@ -52,6 +54,18 @@ namespace ContradictiveGames.CGConsole
 
         protected virtual void Awake()
         {
+            if(Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+
+            else
+            {
+                Destroy(gameObject);
+            }
+
+
             if(consoleOutputPrefab == null)
             {
                 Debug.LogWarning($"We are creating a basic ConsoleOutput Prefab, as none we assigned within the inspector");

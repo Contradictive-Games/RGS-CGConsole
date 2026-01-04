@@ -4,7 +4,7 @@ namespace ContradictiveGames.CGConsole
     {
         Success,
         Invalid,
-        Help,
+        Info,
         Error
     }
     

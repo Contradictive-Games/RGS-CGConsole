@@ -49,11 +49,24 @@ The second thing we require is a `RectTransform` in which the console's output l
 ## Example Command Usage and Creation
 
 
-### Creating a Console Command
+### Attribute Usage
 
-To be able to add commands to the registry, simply add the `ConsoleCmd` attribute above the function. Functions are **not** required to be `public`.
+To be able to add commands to the registry, simply add the `ConsoleCmd` attribute above the function you would like to make into a command. Functions are **not** required to be `public`. The `ConsoleCmd` attribute will require the command name, but will additionally accept a string for an optional description, as well as a boolean to mark whether you would like it to be visible in the auto-completion list, and a boolean to mark whether this command will be listed within the `help` command.
 
 ```csharp
+[ConsoleCmd("example_command", 
+    description: "This command will not show up in `help` or auto-completion",
+    hideFromAutoComplete:true, 
+    hideFromHelpCommand:true
+)]
+public void CommandIDontWantVisible(){
+    /*
+        Do something
+        When typing the `help` command, this command will not be listed
+        When typing in the console's input field, this command will not be listed with the other commands for auto-completion
+    */
+}
+
 [ConsoleCmd("log_normal")]
 public void MyExampleCommand(){
     Debug.Log("We succesfully executed the `log_normal` command");

@@ -18,5 +18,12 @@ namespace ContradictiveGames.CGConsole
         [ConsoleCmd("log_error", "Log an even scarier error")]
         private void LogAnError() => Debug.LogError($"We just logged an error!");
 
+        [ConsoleCmd(
+            "log_secret", 
+            "A command that logs a secret statement, this will not show up in auto-complete and not show up in `help`", 
+            hideFromAutoComplete:true, 
+            hideFromHelpCommand:true
+        )]
+        private void LogASecret() => Debug.Log("A Secret");
     }
 }

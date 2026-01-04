@@ -5,15 +5,18 @@ namespace ContradictiveGames.CGConsole
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class ConsoleCmdAttribute : Attribute
     {
-        public string CommandFormat { get; }
+        public string CommandName { get; }
         public string Description { get; }
         public bool HideFromAutoComplete { get; }
+        public bool HideFromHelpCommand { get; }
 
-        public ConsoleCmdAttribute(string commandFormat, string description = "", bool hideFromAutoComplete = false)
+        public ConsoleCmdAttribute(string commandName, string description = "", bool hideFromAutoComplete = false,
+        bool hideFromHelpCommand = false)
         {
-            CommandFormat = commandFormat;
+            CommandName = commandName;
             Description = description;
             HideFromAutoComplete = hideFromAutoComplete;
+            HideFromHelpCommand = hideFromHelpCommand;
         }
     }
 }
