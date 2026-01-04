@@ -50,7 +50,11 @@ The second thing we require is a `RectTransform` in which the console's output l
 
 ### Setting Up CGConsole's Settings
 
+To edit the base console's settings, in the toolbar click `Edit/Project Settings` and there will be `CGConsole` tab. If you currently do not have a settings asset made, you can create one - and then begin to edit the settings. The settings let you do a few things.
 
+The first is that you can enable/disable logging for when a console command is registered. This will give a few more in-depth details and may help if you are running into issues with commands not registering properly. This is disabled by default.
+
+You can also enforce that any class that tries to register a command, must implement the `ICommandProvider`. This is disabled by default.
 
 ### Attribute Usage
 
