@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-
 namespace ContradictiveGames.CGConsole
 {
     internal static class CGConsoleCommands

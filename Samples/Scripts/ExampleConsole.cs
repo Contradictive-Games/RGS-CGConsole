@@ -8,7 +8,7 @@ namespace ContradictiveGames.CGConsole
     {
         
         [Header("Settings")]
-        private ExampleConsoleSettings settings => Settings as ExampleConsoleSettings;
+        private ExampleConsoleWindowSettings settings => Settings as ExampleConsoleWindowSettings;
 
         [Header("Panel Components")]
         [SerializeField] private Image background;

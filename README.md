@@ -36,25 +36,55 @@ https://github.com/Contradictive-Games/RGS-CGConsole.git
 
 
 
-## Getting Started
+## Setup And Examples
 
-This package includes a base `Console` class that you can inherit from. `Console.cs` is a MonoBehavior script that will handle all the basics of the Console. You can add this to any component by going into the component menu and going to `CGConsole/Console`, which will then add the proper component. 
+### Setting Up CGConsole's Package Settings
 
-The Console does require some minimal setup. The first thing we will require is an `TMP_InputField`. This is where the user can type in commands and submit them.
+CGConsole offers a few package customization options so that you can get this package to fit your needs maybe a bit better, or to also support custom command development.
 
-The second thing we require is a `RectTransform` in which the console's output logs will be parented to. It is generally recommended that you have some kind of basic handling for scrolling, content size fitting, etc. While it is not required, the base `Console` MonoBehavior will additionally have a `ScrollRect` field you can set within the inspector, all it will do by default is scroll to the bottom of the view when creating logs.
+To access the settings, in the toolbar you will need to select `Edit/Project Settings/CGConsole`. If there is no settings asset that already exists (there should), it will prompt you to create a new settings asset, or you can optionally right click in the Project window and select `Contradictive Games/CGConsole/Package Settings`.
 
+The window will look like:
 
+Default package settings and what they do:
+- EnableLoggingForCommandRegistration ***(default: false)***
+    - This setting will log into the console the details for when the command was being registered
+- RequireInterfaceForRegistration ***(default: true)***
+    - Enabling this means that any time you want any of your classes to be able to successfully register a command, you must implement the `ICommandProvider` interface
+- UseCustomRegexForCommandNaming ***(default: false)***
+    - This allows you to define your own custom regex string for command names. When you use the `ConsoleCmd` attribute - the command's name by default must be alphanumeric, and can contain underscores. You can however switch this to true, and define your own regex string for how commands can be named.
+    - ***Warning***: This can potentially break some default console behaviors or cause undesired interactions. For instance, if you allow the `?` to be at the end of a command name, the default functionality for when you type a command with the `?` at the end it will give the command's defined description as well as the arguments required to perform the command.
+- Regex ***(default: ^[a-zA-Z0-9_]+$)***
+    - This is the regex string that we will use to validate a `ConsoleCmd`'s name value. This can not be edited unless you toggle `UseCustomRegexForCommandNaming` to `true`.
+- Default Commands ***(default: all enabled)***
+    - These are some of the default commands, which you can selectively enable/disable - if you'd like to be able to define your own custom versions. As an example, the DefaultCommand `load` does not asynchronously load scenes and may override your own `load` scene command's behaviors if you keep this enabled.
+    - Commands List and their functions
+        - `help`
+            - Lists all available commands that have been registered, so long as their `ConsoleCmd` attribute did not override the `HideFromHelpCommand` attribute to `false`. This will list both the command name, as well as the provided description
+        - `clear`
+            - Clears the console's current logs
+        - `quit`
+            - Exits the application (or play mode in the editor) fully
+        - `load`
+            - Loads a scene by the scene's name.
+            - Format: `load {scene_name_string}`
+            - ***Note: If this doesn't seem to work properly, ensure that the scene is placed within your project's scene list in the build settings***
+        - `set_intkey`
+            - Sets a PlayerPref key of type int to the desired value
+            - Format: `set_intkey {key_name_string} {desired_value}`
+        - `get_intkey`
+            - Logs a PlayerPref key of type int's value
+            - Format: `get_intkey {key_name_string}`
+        -***The rest of the get/set key commands are the same just different types***
 
-## Example Command Usage and Creation
+### Default Behaviors
 
-### Setting Up CGConsole's Settings
+The default Console has a few built-in behaviors that do not require any additional setup. 
 
-To edit the base console's settings, in the toolbar click `Edit/Project Settings` and there will be `CGConsole` tab. If you currently do not have a settings asset made, you can create one - and then begin to edit the settings. The settings let you do a few things.
+The main one is the `?` mod. When typing any command and adding the `?` to the end of the command, it will list command's description (if provided) as well as the required argument types to successfully execute the command.
 
-The first is that you can enable/disable logging for when a console command is registered. This will give a few more in-depth details and may help if you are running into issues with commands not registering properly. This is disabled by default.
+The console also offers suggestions for commands you may want to type by searching through the commands list based off your input. This does a simple lookup by character matching.
 
-You can also enforce that any class that tries to register a command, must implement the `ICommandProvider`. This is disabled by default.
 
 ### Attribute Usage
 
@@ -107,7 +137,8 @@ CGConsoleCommands.RegisterAllCommands();
 
 This will register all `[ConsoleCmd]` attributes and their functions from all MonoBehaviors that have implemented `ICommandProvider` and are actively in the scene when this function was called. If you are utilizing the `Console` class in any way - this is called within the `Start` function.
 
-> **NOTE:** This command will by default ***only*** register MonoBehaviors that are using the `ICommandProvider` interface. However, you can override by adding `true` as the argument and it will register any MonoBehavior whether or not it implements the interface. It is best to never override it, but it is an option.
+> **NOTE:** This command will by default ***only*** register MonoBehaviors that are using the `ICommandProvider` interface. However, you can override by adding `true` as the argument and it will register any MonoBehavior whether or not it implements the interface. It is best to never override it, but it is an option. 
+>> **ADDITIONAL NOTE:** If in the package's settings you set the `RequireInterfaceForRegistration`, this will be overridden and always require the `ICommandProvider` interface
 
 
 #### Manually Register Commands
@@ -118,14 +149,16 @@ When manually registering commands, just do:
 CGConsoleCommands.RegisterCommandsFrom(this)
 ```
 
-Calling this function does **not** require the class to implement `ICommandProvider`.
+Calling this function does **not** require the class to implement `ICommandProvider`, unless you have set the `RequireInterfaceForRegistration` setting in the package's settings to `true`.
 
 This will register all `[ConsoleCmd]` attributes and their functions from the MonoBehavior we call this function from.
 
 
 #### Registering Commands From A Class
 
-Classes can support console commands as well, and are not required to implement `ICommandProvider`. Just ensure that you properly register that class' commands by calling the `RegisterCommandsFrom(object target)` function.
+Classes can support console commands as well, and are not required to implement `ICommandProvider`, unless you have set the `RequireInterfaceForRegistration` setting in the package's settings to `true`. 
+
+Just ensure that you properly register that class' commands by calling the `RegisterCommandsFrom(object target)` function.
 
 
 ```cs
@@ -212,9 +245,7 @@ Additionally, if you'd like to create your own settings - you must inherit the `
 
 Console Commands really only work with supporting basic types like `string`, `int`, `float`, and `bool`
 
-### Are There Any Default Commands?
 
-There is one default command being `help` - which will log all commands and their descriptions.
 
 
 ## Stretch
@@ -224,4 +255,5 @@ Features that are not currently in this package, but I would eventually like to 
 - [ ] Support structs as console command arguments
 - [ ] Support gathering commands automatically, rather than manual registration
 - [ ] Add auto-complete when typing a command in Console input field
+    - [X] Add suggestion box when typing a command for possible command inputs
 - [x] Support non-MonoBehavior classes being able to utilize commands

@@ -23,7 +23,7 @@ namespace ContradictiveGames.CGConsole
         [SerializeField] private TMP_Text autoCompleteText;
 
         [Header("Settings")]
-        public ConsoleSettings Settings;
+        public ConsoleWindowSettings Settings;
 
 
         #region Enable/Disable

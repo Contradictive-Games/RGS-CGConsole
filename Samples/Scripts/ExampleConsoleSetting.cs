@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace ContradictiveGames.CGConsole
 {
-    [CreateAssetMenu(fileName = "Example Console Settings", menuName = "Contradictive Games/CGConsole/Demo/Example Console Settings")]
-    public sealed class ExampleConsoleSettings : ConsoleSettings
+    [CreateAssetMenu(fileName = "Example Console Window Settings", menuName = "Contradictive Games/CGConsole/Demo/Example Console Window Settings")]
+    public sealed class ExampleConsoleWindowSettings : ConsoleWindowSettings
     {
         [Header("Console Panel")]
         public Color TopBarColor = Color.black;
