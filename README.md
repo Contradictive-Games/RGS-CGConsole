@@ -46,6 +46,9 @@ To access the settings, in the toolbar you will need to select `Edit/Project Set
 
 The window will look like:
 
+![project settings window](ConsoleSettings.png "Package Settings Window")
+
+
 Default package settings and what they do:
 - EnableLoggingForCommandRegistration ***(default: false)***
     - This setting will log into the console the details for when the command was being registered

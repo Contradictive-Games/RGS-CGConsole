@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,7 +18,7 @@ namespace ContradictiveGames.CGConsole
     }
 
     [CreateAssetMenu(fileName = "CGConsole Package Settings", menuName = "Contradictive Games/CGConsole/Package Settings")]
-    public sealed class CGConsolePackageSettings : ScriptableObject
+    internal class CGConsolePackageSettings : ScriptableObject
     {
         public const string k_PackageSettingsPath = "Assets/Resources/CGConsole/CGConsolePackageSettings.asset";
 
@@ -40,7 +39,7 @@ namespace ContradictiveGames.CGConsole
 
         [Header("Default Commands")]
         [Tooltip("You can toggle which of the default commands you would like added")]
-        [SerializeField] private List<DefaultCommandSetting> DefaultCommands = new List<DefaultCommandSetting>
+        [SerializeField] private DefaultCommandSetting[] DefaultCommands = new DefaultCommandSetting[]
         {
             new DefaultCommandSetting("help", true),
             new DefaultCommandSetting("clear", true),
@@ -84,14 +83,14 @@ namespace ContradictiveGames.CGConsole
             return false;
         }
 
-        
+        [ContextMenu("Reset All Settings to Defaults")]
         public void ResetToDefaults()
         {
             EnableLoggingForCommandRegistration = false;
             RequireInterfaceForRegistration = true;
             UseCustomRegexForCommandNaming = false;
             Regex = Utilities.k_DefaultCommandNameRegex;
-            DefaultCommands = new List<DefaultCommandSetting>
+            DefaultCommands = new DefaultCommandSetting[]
             {
                 new DefaultCommandSetting("help", true),
                 new DefaultCommandSetting("clear", true),
