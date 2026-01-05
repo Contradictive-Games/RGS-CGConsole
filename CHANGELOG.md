@@ -11,7 +11,6 @@ This release focuses primarily on being able to customize CGConsole to your need
 - Add default commands that can be selectively enabled/disabled
 - Command suggestion box when typing commands into console input field
 - Adding `?` to end of command logs description and required arguments for a ConsoleCommand
-- 
 
 
 ### Fixes/Improvements
