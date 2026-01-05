@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ContradictiveGames.CGConsole
 {
     [Serializable]
-    internal class DefaultCommandSetting
+    public sealed class DefaultCommandSetting
     {
         public string CommandName;
         public bool Enabled = true;
@@ -17,7 +17,7 @@ namespace ContradictiveGames.CGConsole
     }
 
     [CreateAssetMenu(fileName = "CGConsole Package Settings", menuName = "Contradictive Games/CGConsole/Package Settings")]
-    internal class CGConsolePackageSettings : ScriptableObject
+    public sealed class CGConsolePackageSettings : ScriptableObject
     {
         public const string k_PackageSettingsPath = "Assets/Resources/CGConsole/CGConsolePackageSettings.asset";
 
@@ -53,7 +53,7 @@ namespace ContradictiveGames.CGConsole
         };
 
 
-        internal static CGConsolePackageSettings GetOrCreateSettings()
+        public static CGConsolePackageSettings GetOrCreateSettings()
         {
             CGConsolePackageSettings settings = null;
 
@@ -81,7 +81,7 @@ namespace ContradictiveGames.CGConsole
         }
 
 #if UNITY_EDITOR
-        internal static UnityEditor.SerializedObject GetSerializedSettings()
+        public static UnityEditor.SerializedObject GetSerializedSettings()
         {
             return new UnityEditor.SerializedObject(GetOrCreateSettings());
         }
