@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ContradictiveGames.CGConsole.Editor
 {
     [CustomEditor(typeof(CGConsolePackageSettings))]
-    public class CGConsolePackageSettingsEditor : UnityEditor.Editor
+    internal sealed class CGConsolePackageSettingsEditor : UnityEditor.Editor
     {
         private SerializedProperty enableLogging;
         private SerializedProperty defaultCommands;

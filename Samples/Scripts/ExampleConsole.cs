@@ -4,7 +4,7 @@ using TMPro;
 
 namespace ContradictiveGames.CGConsole
 {
-    public class ExampleConsole : Console
+    public sealed class ExampleConsole : Console
     {
         
         [Header("Settings")]

@@ -19,6 +19,7 @@ namespace ContradictiveGames.CGConsole.Editor
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
             string[] guids = AssetDatabase.FindAssets("t:CGConsolePackageSettings");
+
             
             if (guids.Length > 0)
             {

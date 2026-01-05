@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace ContradictiveGames.CGConsole
 {
-    internal class DefaultCommands
+    internal class DefaultCommands : ICommandProvider
     {
 
         #region Load Level
@@ -50,7 +50,7 @@ namespace ContradictiveGames.CGConsole
             PlayerPrefs.Save();
         }
 
-        [ConsoleCmd("log_intkey")] private void LogIntKey(string keyName) => Debug.Log($"Value for `{keyName}`: {PlayerPrefs.GetInt(keyName)}");
+        [ConsoleCmd("get_intkey")] private void LogIntKey(string keyName) => Debug.Log($"Value for `{keyName}`: {PlayerPrefs.GetInt(keyName)}");
         
         
         #endregion
@@ -64,7 +64,7 @@ namespace ContradictiveGames.CGConsole
             PlayerPrefs.Save();
         }
 
-        [ConsoleCmd("log_floatkey")] private void LogFloatKey(string keyName) => Debug.Log($"Value for `{keyName}`: {PlayerPrefs.GetFloat(keyName)}");
+        [ConsoleCmd("get_floatkey")] private void LogFloatKey(string keyName) => Debug.Log($"Value for `{keyName}`: {PlayerPrefs.GetFloat(keyName)}");
         
         
         #endregion
@@ -78,7 +78,7 @@ namespace ContradictiveGames.CGConsole
             PlayerPrefs.Save();
         }
 
-        [ConsoleCmd("log_stringkey")] private void LogStringKey(string keyName) => Debug.Log($"Value for `{keyName}`: {PlayerPrefs.GetString(keyName)}");
+        [ConsoleCmd("get_stringkey")] private void LogStringKey(string keyName) => Debug.Log($"Value for `{keyName}`: {PlayerPrefs.GetString(keyName)}");
 
 
         #endregion

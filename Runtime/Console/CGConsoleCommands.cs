@@ -7,24 +7,12 @@ using UnityEngine;
 
 namespace ContradictiveGames.CGConsole
 {
-    public static class CGConsoleCommands
+    internal static class CGConsoleCommands
     {
-        private static readonly Dictionary<string, ConsoleCommand> allCommands = new(){ 
-            { 
-                "help", 
-                new ConsoleCommand(
-                    "help", 
-                    "List all available console commands", 
-                    hideFromAutoComplete: true,
-                    hideFromHelpCommand: true,
-                    typeof(CGConsoleCommands).GetMethod(nameof(ShowHelp), BindingFlags.Static | BindingFlags.NonPublic), 
-                    new ParameterInfo[0],
-                    null
-                ) 
-            }
-        };
+        private static readonly Dictionary<string, ConsoleCommand> allCommands = new();
         private readonly static HashSet<string> commandNameList = new();
         private static DefaultCommands defaultCommandsInstance;
+        private static CGConsolePackageSettings settings => CGConsolePackageSettings.GetOrCreateSettings();
 
         private static string commandHelpString;
         
@@ -45,8 +33,8 @@ namespace ContradictiveGames.CGConsole
             }
             
             if(
-                CGConsolePackageSettings.Instance != null && 
-                CGConsolePackageSettings.Instance.EnableLoggingForCommandRegistration
+                settings != null && 
+                settings.EnableLoggingForCommandRegistration
             )
             {
                 Debug.Log($"(CG Console) Successfully registered {allCommands.Count} commands. Type `help` into the console to see all available commands.");
@@ -56,7 +44,6 @@ namespace ContradictiveGames.CGConsole
 
         public static void RegisterCommandsFrom(object target)
         {
-            CGConsolePackageSettings settings = CGConsolePackageSettings.Instance;
             bool requireInterface = false;
             if(settings != null)
             {
@@ -65,7 +52,7 @@ namespace ContradictiveGames.CGConsole
 
             if(requireInterface && target is not ICommandProvider) return;
 
-            
+
             var methods = target.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             string cmdName = "";
 
@@ -86,8 +73,8 @@ namespace ContradictiveGames.CGConsole
             }
 
             if(
-                CGConsolePackageSettings.Instance != null && 
-                CGConsolePackageSettings.Instance.EnableLoggingForCommandRegistration)
+                settings != null && 
+                settings.EnableLoggingForCommandRegistration)
             {
                 
                 Debug.Log($"(CG Console) Registered `{cmdName}` command from {target}");
@@ -101,10 +88,9 @@ namespace ContradictiveGames.CGConsole
 
         private static void RegisterCommandsFromSelectively(object target)
         {
-            var settings = CGConsolePackageSettings.Instance;
             if(settings == null) return;
 
-            var methods = target.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var methods = target.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             int registeredCount = 0;
             foreach(var method in methods)
             {
@@ -210,7 +196,6 @@ namespace ContradictiveGames.CGConsole
         {
             if(registeredDefaultCommands) return;
 
-            var settings = CGConsolePackageSettings.Instance;
             if(settings == null) return;
 
             if (settings.IsCommandEnabled("help") && CommandIsValid("help"))
@@ -270,8 +255,7 @@ namespace ContradictiveGames.CGConsole
         {
             cmdName.ToLower().Trim();
 
-            var settings = CGConsolePackageSettings.Instance;
-            if(settings == null) 
+            if(settings == null) return true; 
 
             if(!Regex.IsMatch(cmdName, regex))
             {

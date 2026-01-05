@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ContradictiveGames.CGConsole
 {
-    [CreateAssetMenu(fileName = "Example Console Settings", menuName = "CGConsole Demo/Example Console Settings")]
+    [CreateAssetMenu(fileName = "Example Console Settings", menuName = "Contradictive Games/CGConsole/Demo/Example Console Settings")]
     public class ExampleConsoleSettings : ConsoleSettings
     {
         [Header("Console Panel")]
