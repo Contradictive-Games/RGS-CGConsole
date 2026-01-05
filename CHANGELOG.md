@@ -1,6 +1,38 @@
 # CG Console Changelog
 
 
+## [v0.7.260105] - 01-05-2026
+
+This release focuses primarily on being able to customize CGConsole to your needs, as well as adding a few QoL improvements and features to help with custom command creation and debugging.
+
+### Features
+
+- Add project settings tab to custom CGConsole behaviors
+- Add default commands that can be selectively enabled/disabled
+- Command suggestion box when typing commands into console input field
+- Adding `?` to end of command logs description and required arguments for a ConsoleCommand
+- 
+
+
+### Fixes/Improvements
+
+- Command naming validation through Regex
+- Users can define custom Regex string for naming validation
+- Commands can be hidden from being listed in default `help` command
+- Commands can be hidden from suggestions list
+- Users can toggle command regisration logs
+- Users can toggle requirement for any class trying to register a `ConsoleCommand` needing to implement `ICommandProvider` interface
+- Update `Samples` to better fit new release
+- Better command registration handling
+
+### Misc. Changes
+
+- Add `ResponseType.Info` to `CommandResponse`
+- Update `package.json`
+- Update documentation to fit new release
+
+
+
 ## [v0.6.251230] - 12-30-2025
 
 This marks the second release of CGConsole.
