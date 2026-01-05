@@ -1,9 +1,7 @@
-using System;
-
 namespace ContradictiveGames.CGConsole
 {
-    [AttributeUsage(AttributeTargets.Method)]
-    public sealed class ConsoleCmdAttribute : Attribute
+    [System.AttributeUsage(System.AttributeTargets.Method)]
+    public sealed class ConsoleCmdAttribute : System.Attribute
     {
         public string CommandName { get; }
         public string Description { get; }

@@ -91,19 +91,21 @@ The console also offers suggestions for commands you may want to type by searchi
 
 ### Attribute Usage
 
-To be able to add commands to the registry, simply add the `ConsoleCmd` attribute above the function you would like to make into a command. Functions are **not** required to be `public`. The `ConsoleCmd` attribute will require the command name, but will additionally accept a string for an optional description, as well as a boolean to mark whether you would like it to be visible in the auto-completion list, and a boolean to mark whether this command will be listed within the `help` command.
+To be able to add commands to the registry, simply add the `ConsoleCmd` attribute above the function you would like to make into a command. Functions are **not** required to be `public`. The `ConsoleCmd` attribute will require the command name, but will additionally accept a string for an optional description, as well as a boolean to mark whether you would like it to be visible in the suggestion list, and a boolean to mark whether this command will be listed within the `help` command.
 
 ```csharp
-[ConsoleCmd("example_command", 
-    description: "This command will not show up in `help` or auto-completion",
-    hideFromAutoComplete:true, 
-    hideFromHelpCommand:true
+[ConsoleCmd(
+    commandName: "example_command", 
+    description: "This command will not show up in `help` or auto-completion/show up in suggestions",
+    hideFromAutoComplete:true, //defaults false
+    hideFromHelpCommand:true //defaults false
 )]
 public void CommandIDontWantVisible(){
     /*
         Do something
         When typing the `help` command, this command will not be listed
-        When typing in the console's input field, this command will not be listed with the other commands for auto-completion
+        When typing in the console's input field, this command will not be listed with the other commands for auto-completion/in the suggestions list
+        It will otherwise still execute as normal 
     */
 }
 
@@ -138,7 +140,7 @@ To begin using any commands you create, you must register these commands. There'
 CGConsoleCommands.RegisterAllCommands();
 ```
 
-This will register all `[ConsoleCmd]` attributes and their functions from all MonoBehaviors that have implemented `ICommandProvider` and are actively in the scene when this function was called. If you are utilizing the `Console` class in any way - this is called within the `Start` function.
+This will register all `[ConsoleCmd]` attributes and their functions from all MonoBehaviors that have implemented `ICommandProvider` and are actively in the scene when this function was called. If you are utilizing the `CGConsoleWindow` class in any way - this is called within the `Start` function.
 
 > **NOTE:** This command will by default ***only*** register MonoBehaviors that are using the `ICommandProvider` interface. However, you can override by adding `true` as the argument and it will register any MonoBehavior whether or not it implements the interface. It is best to never override it, but it is an option. 
 >> **ADDITIONAL NOTE:** If in the package's settings you set the `RequireInterfaceForRegistration`, this will be overridden and always require the `ICommandProvider` interface
@@ -187,7 +189,7 @@ public class TestMonoBehavior : MonoBehavior
 
     private void RegisterCommandsInMyTestClass()
     {
-        ConsoleCommandRegister.RegisterCommandsFrom(MyClass);
+        CGConsoleCommands.RegisterCommandsFrom(MyClass);
     }
 
 }
@@ -196,7 +198,7 @@ public class TestMonoBehavior : MonoBehavior
 
 ### Executing a Console Command
 
-Commands can both be executed within a script and by typing the command within the `Console` input field. 
+Commands can both be executed within a script and by typing the command within the `CGConsoleWindow` input field (or your own custom input field that parses the value and can submit the value like the script does, as this is what the `CGConsoleWindow` class does by default). 
 
 To execute a command within a script you can do:
 
@@ -234,11 +236,11 @@ The `CGConsoleCommands` class handles the building of the `CommandResponse`.
 
 ## Console Usage
 
-Implementing the `Console` is pretty simple, and it can 
+To create your own Console Window, you can either use the created example console window prefab that is within the `Samples` folder within the package or you can create your own script that inherits the `CGConsoleWindow` class.
 
-The base class comes with a few useful methods. I recommend you look through the class in the `Runtime/` folder to see all of its core functionality.
+The base class comes with a few useful methods. I recommend you look through the class in the `Runtime/ConsoleWindow/CGConsoleWindow.cs` file to see all of its core functionality.
 
-Additionally, if you'd like to create your own settings - you must inherit the `ConsoleSettings` ScriptableObject, and then type cast when using any of your custom settings.
+Additionally, if you'd like to create your own settings - you must inherit the `CGConsoleWindowSettings` ScriptableObject, and then type cast when using any of your custom settings.
 
 
 
