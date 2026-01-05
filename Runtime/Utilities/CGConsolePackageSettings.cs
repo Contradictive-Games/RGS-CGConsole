@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace ContradictiveGames.CGConsole
@@ -56,22 +55,37 @@ namespace ContradictiveGames.CGConsole
 
         internal static CGConsolePackageSettings GetOrCreateSettings()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<CGConsolePackageSettings>(Utilities.k_SettingsAssetPath);
+            CGConsolePackageSettings settings = null;
+
+#if UNITY_EDITOR
+            settings = UnityEditor.AssetDatabase.LoadAssetAtPath<CGConsolePackageSettings>(Utilities.k_SettingsAssetPath);
+            
             if(settings == null)
             {
                 settings = ScriptableObject.CreateInstance<CGConsolePackageSettings>();
-                settings.ResetToDefaults();
-                AssetDatabase.CreateAsset(settings, Utilities.k_SettingsAssetPath);
-                AssetDatabase.SaveAssets();
+                if(settings == null)
+                {
+                    if (!System.IO.Directory.Exists(Utilities.k_SettingsAssetDirectory))
+                    {
+                        System.IO.Directory.CreateDirectory(Utilities.k_SettingsAssetDirectory);
+                    }
+                    settings.ResetToDefaults();
+                    UnityEditor.AssetDatabase.CreateAsset(settings, Utilities.k_SettingsAssetPath);
+                    UnityEditor.AssetDatabase.SaveAssets();
+                }
             }
-
+#else
+            settings = Resources.Load<CGConsolePackageSettings>(Utilities.k_SettingsResourcePath);
+#endif
             return settings;
         }
 
-        internal static SerializedObject GetSerializedSettings()
+#if UNITY_EDITOR
+        internal static UnityEditor.SerializedObject GetSerializedSettings()
         {
-            return new SerializedObject(GetOrCreateSettings());
+            return new UnityEditor.SerializedObject(GetOrCreateSettings());
         }
+#endif
 
 
         public bool IsCommandEnabled(string commandName)

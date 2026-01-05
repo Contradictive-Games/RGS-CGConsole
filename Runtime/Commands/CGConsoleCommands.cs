@@ -11,7 +11,14 @@ namespace ContradictiveGames.CGConsole
         private static readonly Dictionary<string, ConsoleCommand> allCommands = new();
         private readonly static HashSet<string> commandNameList = new();
         private static DefaultCommands defaultCommandsInstance;
-        private static CGConsolePackageSettings settings => CGConsolePackageSettings.GetOrCreateSettings();
+        private static CGConsolePackageSettings settings { 
+            get
+            {
+                if(_settings == null) _settings = CGConsolePackageSettings.GetOrCreateSettings();
+                return _settings;
+        }}
+
+        private static CGConsolePackageSettings _settings;
 
         private static string commandHelpString;
         
@@ -22,7 +29,12 @@ namespace ContradictiveGames.CGConsole
 
         public static void RegisterAllCommands(bool mustBeCommandProvider = true)
         {
+#if UNITY_2023_1_OR_NEWER
             MonoBehaviour[] objects = GameObject.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None);
+#else
+            MonoBehaviour[] objects = GameObject.FindObjectsOfType<MonoBehaviour>();
+#endif
+            
             foreach (var obj in objects)
             {
                 if (mustBeCommandProvider && obj is ICommandProvider) RegisterCommandsFrom(obj);
@@ -193,9 +205,9 @@ namespace ContradictiveGames.CGConsole
         {
             if(registeredDefaultCommands) return;
 
-            if(settings == null) return;
+            bool registerAll = settings == null;
 
-            if (settings.IsCommandEnabled("help") && CommandIsValid("help"))
+            if (registerAll || settings.IsCommandEnabled("help"))
             {
                 allCommands.Add(
                     "help", 

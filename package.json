@@ -13,6 +13,6 @@
     "samples": [{
         "displayName": "CGConsole Demo",
         "description": "Demo assets for the console",
-        "path": "Samples/CGconsoleDemo"
+        "path": "Samples/CGConsoleDemo"
     }]
 }
