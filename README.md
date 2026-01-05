@@ -42,7 +42,7 @@ https://github.com/Contradictive-Games/RGS-CGConsole.git
 
 CGConsole offers a few package customization options so that you can get this package to fit your needs maybe a bit better, or to also support custom command development.
 
-To access the settings, in the toolbar you will need to select `Edit/Project Settings/CGConsole`. If there is no settings asset that already exists (there should), it will prompt you to create a new settings asset, or you can optionally right click in the Project window and select `Contradictive Games/CGConsole/Package Settings`.
+To access the settings, in the toolbar you will need to select `Edit/Project Settings/CGConsole`. If there is no settings asset that already exists, it will prompt you to create a new settings asset, or you can optionally right click in the Project window and select `Contradictive Games/CGConsole/Package Settings`.
 
 The window will look like:
 

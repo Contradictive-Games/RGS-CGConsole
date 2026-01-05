@@ -6,10 +6,10 @@ using TMPro;
 
 namespace ContradictiveGames.CGConsole
 {
-    [AddComponentMenu("ContradictiveGames/CGConsole/Console")]
-    public class Console : MonoBehaviour
+    [AddComponentMenu("ContradictiveGames/CGConsole/CGConsole Window")]
+    public class CGConsoleWindow : MonoBehaviour
     {
-        public static Console Instance { get; private set; }
+        public static CGConsoleWindow Instance { get; private set; }
 
         [Header("Console Components")]
         [SerializeField] private TMP_InputField consoleInput;
@@ -23,7 +23,7 @@ namespace ContradictiveGames.CGConsole
         [SerializeField] private TMP_Text autoCompleteText;
 
         [Header("Settings")]
-        public ConsoleWindowSettings Settings;
+        public CGConsoleWindowSettings Settings;
 
 
         #region Enable/Disable

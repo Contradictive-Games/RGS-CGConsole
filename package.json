@@ -9,5 +9,10 @@
     "author": {
         "name": "contradictive Games",
         "url": "https://www.contradictivegames.com"
+    },
+    "samples": {
+        "displayName": "CGConsole Demo",
+        "description": "Demo assets for the console",
+        "path": "Samples/CGconsoleDemo"
     }
 }
