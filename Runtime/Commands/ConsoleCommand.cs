@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace ContradictiveGames.CGConsole
 {
-    public sealed class ConsoleCommand
+    public class ConsoleCommand
     {
         public readonly string Command;
         public readonly string Description;

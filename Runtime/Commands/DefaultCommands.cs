@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace ContradictiveGames.CGConsole
 {
-    internal class DefaultCommands : ICommandProvider
+    public sealed class DefaultCommands : ICommandProvider
     {
 
         #region Load Level

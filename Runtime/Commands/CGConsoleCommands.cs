@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ContradictiveGames.CGConsole
 {
-    internal static class CGConsoleCommands
+    public static class CGConsoleCommands
     {
         private static readonly Dictionary<string, ConsoleCommand> allCommands = new();
         private readonly static HashSet<string> commandNameList = new();
