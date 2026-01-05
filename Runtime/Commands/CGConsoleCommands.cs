@@ -35,10 +35,12 @@ namespace ContradictiveGames.CGConsole
             MonoBehaviour[] objects = GameObject.FindObjectsOfType<MonoBehaviour>();
 #endif
             
+            bool requireInterface = settings.RequireInterfaceForRegistration || mustBeCommandProvider;
             foreach (var obj in objects)
             {
-                if (mustBeCommandProvider && obj is ICommandProvider) RegisterCommandsFrom(obj);
-                else if(!mustBeCommandProvider) RegisterCommandsFrom(obj);
+                if(requireInterface && obj is not ICommandProvider) continue;
+                
+                RegisterCommandsFrom(obj);
             }
             
             if(
