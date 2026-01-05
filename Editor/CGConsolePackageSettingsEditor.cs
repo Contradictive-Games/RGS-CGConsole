@@ -9,6 +9,8 @@ namespace ContradictiveGames.CGConsole.Editor
         private SerializedProperty enableLogging;
         private SerializedProperty defaultCommands;
         private SerializedProperty forceInterfaceRequirement;
+        private SerializedProperty useCustomRegex;
+        private SerializedProperty customRegexString;
 
         private void OnEnable()
         {
@@ -17,6 +19,8 @@ namespace ContradictiveGames.CGConsole.Editor
             enableLogging = serializedObject.FindProperty("EnableLoggingForCommandRegistration");
             defaultCommands = serializedObject.FindProperty("DefaultCommands");
             forceInterfaceRequirement = serializedObject.FindProperty("RequireInterfaceForRegistration");
+            useCustomRegex = serializedObject.FindProperty("UseCustomRegexForCommandNaming");
+            customRegexString = serializedObject.FindProperty("Regex");
         }
 
         public override void OnInspectorGUI()
@@ -35,8 +39,17 @@ namespace ContradictiveGames.CGConsole.Editor
             EditorGUILayout.PropertyField(enableLogging);
             EditorGUILayout.Space(5);
 
-
             EditorGUILayout.PropertyField(forceInterfaceRequirement);
+            EditorGUILayout.Space(5);
+            
+            EditorGUILayout.PropertyField(useCustomRegex);
+            if (useCustomRegex.boolValue)
+            {
+                EditorGUILayout.HelpBox("Warning: This can potentially break some of the default behaviors with the console. It's best to at least ensure that your own commands can not end with a `?`", MessageType.Warning);
+            }
+            EditorGUI.BeginDisabledGroup(useCustomRegex.boolValue == false);
+            EditorGUILayout.PropertyField(customRegexString);
+            EditorGUI.EndDisabledGroup();
             EditorGUILayout.Space(15);
             
 

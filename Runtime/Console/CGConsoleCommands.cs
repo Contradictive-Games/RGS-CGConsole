@@ -18,8 +18,6 @@ namespace ContradictiveGames.CGConsole
         
         private static bool registeredDefaultCommands = false;
 
-        private const string regex = "^[a-zA-Z0-9_]+$";
-
         #region Command Registration
 
 
@@ -257,7 +255,7 @@ namespace ContradictiveGames.CGConsole
 
             if(settings == null) return true; 
 
-            if(!Regex.IsMatch(cmdName, regex))
+            if(!Regex.IsMatch(cmdName, settings.Regex))
             {
                 Debug.LogError($"Received invalid command format. Please remove special characters (excluding underscores). Cmd: {cmdName}");
                 return false;

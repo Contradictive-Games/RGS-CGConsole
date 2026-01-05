@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ContradictiveGames.CGConsole
 {
     [Serializable]
-    public class DefaultCommandSetting
+    internal class DefaultCommandSetting
     {
         public string CommandName;
         public bool Enabled = true;
@@ -18,7 +18,7 @@ namespace ContradictiveGames.CGConsole
         }
     }
 
-    [CreateAssetMenu(fileName = "CGConsole Package Settings", menuName = "Contradictive Games/CG Console/Package Settings")]
+    [CreateAssetMenu(fileName = "CGConsole Package Settings", menuName = "Contradictive Games/CGConsole/Package Settings")]
     public sealed class CGConsolePackageSettings : ScriptableObject
     {
         public const string k_PackageSettingsPath = "Assets/Resources/CGConsole/CGConsolePackageSettings.asset";
@@ -30,11 +30,17 @@ namespace ContradictiveGames.CGConsole
 
         [Header("ICommandProvider Interface")]
         [Tooltip("If you want to enforce that every time you register a command, that class must implement the ICommandProvider interface")]
-        public bool RequireInterfaceForRegistration = false;
+        public bool RequireInterfaceForRegistration = true;
+
+        [Header("Command Naming")]
+        [Tooltip("If you want to name your commands with more than just the basic alphanumeric and underscores, you can create your own custom regex")]
+        public bool UseCustomRegexForCommandNaming = false;
+        [Tooltip("Your custom regex string")]
+        public string Regex = "^[a-zA-Z0-9_]+$";
 
         [Header("Default Commands")]
         [Tooltip("You can toggle which of the default commands you would like added")]
-        public List<DefaultCommandSetting> DefaultCommands = new List<DefaultCommandSetting>
+        [SerializeField] private List<DefaultCommandSetting> DefaultCommands = new List<DefaultCommandSetting>
         {
             new DefaultCommandSetting("help", true),
             new DefaultCommandSetting("clear", true),
@@ -51,12 +57,12 @@ namespace ContradictiveGames.CGConsole
 
         internal static CGConsolePackageSettings GetOrCreateSettings()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<CGConsolePackageSettings>(k_PackageSettingsPath);
+            var settings = AssetDatabase.LoadAssetAtPath<CGConsolePackageSettings>(Utilities.k_SettingsAssetPath);
             if(settings == null)
             {
                 settings = ScriptableObject.CreateInstance<CGConsolePackageSettings>();
                 settings.ResetToDefaults();
-                AssetDatabase.CreateAsset(settings, k_PackageSettingsPath);
+                AssetDatabase.CreateAsset(settings, Utilities.k_SettingsAssetPath);
                 AssetDatabase.SaveAssets();
             }
 
@@ -67,6 +73,7 @@ namespace ContradictiveGames.CGConsole
         {
             return new SerializedObject(GetOrCreateSettings());
         }
+
 
         public bool IsCommandEnabled(string commandName)
         {
@@ -81,6 +88,9 @@ namespace ContradictiveGames.CGConsole
         public void ResetToDefaults()
         {
             EnableLoggingForCommandRegistration = false;
+            RequireInterfaceForRegistration = true;
+            UseCustomRegexForCommandNaming = false;
+            Regex = Utilities.k_DefaultCommandNameRegex;
             DefaultCommands = new List<DefaultCommandSetting>
             {
                 new DefaultCommandSetting("help", true),

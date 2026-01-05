@@ -5,27 +5,19 @@ using System.IO;
 
 namespace ContradictiveGames.CGConsole.Editor
 {
-    public class CGConsoleSettingsProvider : SettingsProvider
+    internal class CGConsoleSettingsProvider : SettingsProvider
     {
         private SerializedObject serializedSettings;
         private UnityEditor.Editor editor;
         private CGConsolePackageSettings settingsAsset;
         
-        private const string SettingsDirectory = "Assets/Resources/CGConsole";
         
         public CGConsoleSettingsProvider(string path, SettingsScope scopes = SettingsScope.Project)
             : base(path, scopes) { }
         
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
-            string[] guids = AssetDatabase.FindAssets("t:CGConsolePackageSettings");
-
-            
-            if (guids.Length > 0)
-            {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
-                settingsAsset = AssetDatabase.LoadAssetAtPath<CGConsolePackageSettings>(assetPath);
-            }
+            settingsAsset = AssetDatabase.LoadAssetAtPath<CGConsolePackageSettings>(Utilities.k_SettingsAssetPath);
             
             if (settingsAsset != null)
             {
@@ -81,16 +73,16 @@ namespace ContradictiveGames.CGConsole.Editor
         
         private void CreateSettingsAsset()
         {
-            if (!Directory.Exists(SettingsDirectory))
+            if (!Directory.Exists(Utilities.k_SettingsAssetDirectory))
             {
-                Directory.CreateDirectory(SettingsDirectory);
+                Directory.CreateDirectory(Utilities.k_SettingsAssetDirectory);
                 AssetDatabase.Refresh();
             }
             
             var newSettings = ScriptableObject.CreateInstance<CGConsolePackageSettings>();
             newSettings.ResetToDefaults();
             
-            AssetDatabase.CreateAsset(newSettings, SettingsDirectory + "/CGConsolePackageSettings.asset");
+            AssetDatabase.CreateAsset(newSettings, Utilities.k_SettingsAssetDirectory + "/CGConsolePackageSettings.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             
@@ -101,7 +93,7 @@ namespace ContradictiveGames.CGConsole.Editor
             Selection.activeObject = newSettings;
             EditorGUIUtility.PingObject(newSettings);
             
-            Debug.Log($"CG Console Package settings asset created at: {SettingsDirectory}"); 
+            Debug.Log($"CG Console Package settings asset created at: {Utilities.k_SettingsAssetDirectory}"); 
         }
         
         [SettingsProvider]

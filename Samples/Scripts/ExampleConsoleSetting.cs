@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ContradictiveGames.CGConsole
 {
     [CreateAssetMenu(fileName = "Example Console Settings", menuName = "Contradictive Games/CGConsole/Demo/Example Console Settings")]
-    public class ExampleConsoleSettings : ConsoleSettings
+    public sealed class ExampleConsoleSettings : ConsoleSettings
     {
         [Header("Console Panel")]
         public Color TopBarColor = Color.black;
